@@ -74,7 +74,7 @@ int main(void) {
 
     // --- Dọn dẹp ---
     UnloadGameView(); // Giải phóng textures
-    UnloadTexture(cerydra_intro);
+    UnloadAllTextures();
     CloseWindow();
 
     return 0;
