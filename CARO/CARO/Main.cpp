@@ -6,9 +6,11 @@
 
 int main(void) {
     // --- Khởi tạo (từ Main.cpp cũ) ---
-    const int screenWidth = 800;
-    const int screenHeight = 600;
+    int display = GetCurrentMonitor();
+    const int screenWidth = GetMonitorWidth(display);
+    const int screenHeight = GetMonitorHeight(display);
     InitWindow(screenWidth, screenHeight, "ĐỒ ÁN CARO - Raylib 5.0"); //
+    ToggleFullscreen();
     SetTargetFPS(60);
 
     // --- Khởi tạo các module ---
@@ -72,6 +74,7 @@ int main(void) {
 
     // --- Dọn dẹp ---
     UnloadGameView(); // Giải phóng textures
+    UnloadTexture(cerydra_intro);
     CloseWindow();
 
     return 0;

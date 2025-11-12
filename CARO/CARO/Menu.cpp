@@ -5,9 +5,11 @@
 int g_menuChoice = 0; //
 const char* MENU_ITEMS[] = { "NEW GAME", "LOAD GAME", "ABOUT", "SETTING", "EXIT" };
 const int MENU_COUNT = 5; //
+Texture2D cerydra_intro;
 
 void InitMenu() {
     g_menuChoice = 0;
+    cerydra_intro = LoadTexture("assects/images/cerydra.png");
 }
 
 // Hàm này cập nhật logic menu
@@ -48,18 +50,28 @@ void UpdateMenu(GameScreen& currentScreen) {
 
 // Hàm này vẽ menu, thay thế DrawMenuScreen
 void DrawMenu() {
-    ClearBackground(BLACK);
+    ClearBackground(WHITE);
 
     // Tương đương DrawString
-    int titleWidth = MeasureText("GAME CONSOLE", 60);
-    DrawText("GAME CONSOLE", (GetScreenWidth() - titleWidth) / 2, 100, 60, SKYBLUE);
+    int titleWidth = MeasureText("CARO GAME", 220);
+    DrawText("CARO GAME", (GetScreenWidth() - titleWidth) / 2, 100, 220, SKYBLUE);
 
-    // Vẽ các lựa chọn
+    // Vẽ các lựa chọn  
     for (int i = 0; i < MENU_COUNT; i++) {
         Color color = (i == g_menuChoice) ? GOLD : GRAY; //
-        int textWidth = MeasureText(MENU_ITEMS[i], 40);
-        DrawText(MENU_ITEMS[i], (GetScreenWidth() - textWidth) / 2, 250 + i * 60, 40, color);
+        int textWidth = MeasureText(MENU_ITEMS[i], 100);
+        DrawText(MENU_ITEMS[i], (GetScreenWidth() - textWidth) / 2, 600 + i * 200, 100, color);
     }
+
+    DrawImage();
+}
+
+void DrawImage() {
+    BeginDrawing();
+
+    DrawTexture(cerydra_intro, 100, 200, WHITE);
+
+    EndDrawing();
 }
 
 // --- Màn hình About ---
@@ -69,7 +81,7 @@ void UpdateAbout(GameScreen& currentScreen) {
     }
 }
 void DrawAbout() { //
-    ClearBackground(BLACK);
+    ClearBackground(WHITE);
     DrawText("CARO GAME - MERGED VERSION", 50, 100, 40, WHITE);
     DrawText("Developed by [TEAM 2] & Merged by AI", 50, 160, 20, GRAY);
     DrawText("Press [ESC] or [ENTER] to return...", 50, 300, 20, SKYBLUE);
@@ -82,7 +94,7 @@ void UpdateSetting(GameScreen& currentScreen) {
     }
 }
 void DrawSetting() { //
-    ClearBackground(BLACK);
+    ClearBackground(WHITE);
     DrawText("This feature is developing!!", 50, 100, 40, WHITE);
     DrawText("Press [ESC] or [ENTER] to return...", 50, 300, 20, SKYBLUE);
 }
