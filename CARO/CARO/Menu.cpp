@@ -4,12 +4,18 @@
 
 int g_menuChoice = 0; //
 const char* MENU_ITEMS[] = { "NEW GAME", "LOAD GAME", "ABOUT", "SETTING", "EXIT" };
-const int MENU_COUNT = 5; //
-Texture2D cerydra_intro;
+const int MENU_COUNT = 5; 
+std::map<std::string, Texture2D> game_textures; // Map luu theo Key: Value;
+
 
 void InitMenu() {
     g_menuChoice = 0;
-    cerydra_intro = LoadTexture("assects/images/cerydra.png");
+    game_textures["background"] = LoadTexture("assects/images/intro_bg.png");
+    game_textures["cerydra"] = LoadTexture("assects/images/cerydra.png");
+    game_textures["silverwolf"] = LoadTexture("assects/images/silverwolf_intro.png");
+    game_textures["X_icon"] = LoadTexture("assects/images/X_intro.png");
+    game_textures["O_icon"] = LoadTexture("assects/images/O_intro.png");
+    game_textures["choosen_arrow"] = LoadTexture("assects/images/arrow_menu.png");
 }
 
 // Hàm này cập nhật logic menu
@@ -52,26 +58,64 @@ void UpdateMenu(GameScreen& currentScreen) {
 void DrawMenu() {
     ClearBackground(WHITE);
 
+    // Ve Background
+    Texture2D bg = game_textures["background"];
+
+    Rectangle RectSource = { 0.0, 0.0, (float)bg.width, (float)bg.height }; // Phan anh can ve
+    Rectangle RectDest = { 0.0, 0.0, (float)GetScreenWidth(), (float)GetScreenWidth() }; // Phan dc ve len
+
+    DrawTexturePro(bg, RectSource, RectDest, Vector2{ 0,0 }, 0, WHITE);
+
     // Tương đương DrawString
     int titleWidth = MeasureText("CARO GAME", 220);
-    DrawText("CARO GAME", (GetScreenWidth() - titleWidth) / 2, 100, 220, SKYBLUE);
+    int title_posX = (GetScreenWidth() - titleWidth) / 2;
+    int title_posY = 100;
+    DrawTextAndBorder("CARO GAME", title_posX, title_posY, 220, 15 , RED, SKYBLUE);
 
     // Vẽ các lựa chọn  
     for (int i = 0; i < MENU_COUNT; i++) {
-        Color color = (i == g_menuChoice) ? GOLD : GRAY; //
+        Color TColor = (i == g_menuChoice) ? YELLOW : LIGHTGRAY;
+        Color BColor = (i == g_menuChoice) ? DARKPURPLE : BLACK;
         int textWidth = MeasureText(MENU_ITEMS[i], 100);
-        DrawText(MENU_ITEMS[i], (GetScreenWidth() - textWidth) / 2, 600 + i * 200, 100, color);
+        int text_x_position = (GetScreenWidth() - textWidth) / 2;
+        int text_y_position = 600 + i * 200;
+        int text_xend_position = (text_x_position + textWidth);
+        DrawTextAndBorder(MENU_ITEMS[i], text_x_position, text_y_position, 100, 10, BColor, TColor);
+        if (i == g_menuChoice) {
+            Vector2 LeftArrow_position = { text_x_position - 50, text_y_position - 20};
+            Vector2 RightArrow_position = { text_xend_position + 50, text_y_position + 105};
+            DrawMenuArrow(LeftArrow_position, RightArrow_position);
+        }
     }
 
     DrawImage();
 }
 
+void DrawMenuArrow(Vector2 LeftArrow, Vector2 RightArrow) {
+    DrawTextureEx(game_textures["choosen_arrow"], LeftArrow, 90, 0.25, WHITE);
+    DrawTextureEx(game_textures["choosen_arrow"], RightArrow, -90, 0.25, WHITE);
+}
+
 void DrawImage() {
-    BeginDrawing();
 
-    DrawTexture(cerydra_intro, 100, 200, WHITE);
+    Vector2 cerydra_position = { 100, 600 };
+    Vector2 silverwolf_position = { GetScreenWidth() - 1050, 600};
+    Vector2 O_position = { 100, 80 };
+    Vector2 X_position = { GetScreenWidth() - 600, 80 };
 
-    EndDrawing();
+    DrawTextureEx(game_textures["O_icon"], O_position, 0, 1.0, WHITE);
+    DrawTextureEx(game_textures["X_icon"], X_position, 0, 0.7, WHITE);
+    //DrawTextureEx(game_textures["cerydra"], cerydra_position, 0, 2.0, WHITE);
+    //DrawTextureEx(game_textures["silverwolf"], silverwolf_position, 0, 2.0, WHITE);
+
+}
+
+void DrawTextAndBorder(const char* text, int posX, int posY, int Size, int Outline, Color BColor, Color TColor) {
+    DrawText(text, posX - Outline, posY, Size, BColor);
+    DrawText(text, posX + Outline, posY, Size, BColor);
+    DrawText(text, posX, posY + Outline, Size, BColor);
+    DrawText(text, posX, posY - Outline, Size, BColor);
+    DrawText(text, posX, posY, Size, TColor);
 }
 
 // --- Màn hình About ---
@@ -97,4 +141,11 @@ void DrawSetting() { //
     ClearBackground(WHITE);
     DrawText("This feature is developing!!", 50, 100, 40, WHITE);
     DrawText("Press [ESC] or [ENTER] to return...", 50, 300, 20, SKYBLUE);
+}
+
+// Clear All Textures
+void UnloadAllTextures() {
+    for (auto pair : game_textures) {
+        UnloadTexture(pair.second);
+    }
 }

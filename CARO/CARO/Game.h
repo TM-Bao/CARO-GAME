@@ -3,6 +3,7 @@
 
 #include "Global.h"
 #include <string> // (cho save/load)
+#include <map>
 
 // === Các biến trạng thái game (từ Game.cpp cũ) ===
 // Chúng ta "extern" để các file khác có thể ĐỌC
