@@ -5,11 +5,13 @@
 
 // Biến extern lưu lựa chọn (từ Global.h cũ)
 extern int g_menuChoice; //
+extern Texture2D cerydra_intro;
 
 // Các hàm cho màn hình menu
 void InitMenu();
 void UpdateMenu(GameScreen& currentScreen); // Cập nhật logic menu
-void DrawMenu();                           // Vẽ menu
+void DrawMenu();   // Vẽ menu
+void DrawImage();
 
 // Các màn hình con
 void DrawAbout();
