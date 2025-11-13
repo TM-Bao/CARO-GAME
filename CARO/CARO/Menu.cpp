@@ -72,13 +72,10 @@ void DrawMenu() {
     int title_posY = 50;
     DrawTextAndBorder("CARO GAME", title_posX, title_posY, 180, 15, RED, SKYBLUE);
 
-    // ⭐️ "THỦ THUẬT" 1: VẼ ẢNH TRƯỚC KHI VẼ CHỮ
-    // (Chúng ta chuyển DrawImage() từ cuối hàm lên đây)
     DrawImage();
 
-    // ⭐️ "THỦ THUẬT" 2: CĂN CHỈNH LẠI VỊ TRÍ Y CỦA MENU
-    int menu_start_y = 350; // Bắt đầu ở Y=450 (thay vì 600)
-    int menu_spacing = 100;  // Giãn cách 90 (thay vì 200)
+    int menu_start_y = 350; 
+    int menu_spacing = 100;  
 
     // Vẽ các lựa chọn  
     for (int i = 0; i < MENU_COUNT; i++) {
