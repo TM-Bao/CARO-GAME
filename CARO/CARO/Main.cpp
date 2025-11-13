@@ -6,11 +6,7 @@
 
 int main(void) {
     // --- Khởi tạo (từ Main.cpp cũ) ---
-    int display = GetCurrentMonitor();
-    const int screenWidth = GetMonitorWidth(display);
-    const int screenHeight = GetMonitorHeight(display);
-    InitWindow(screenWidth, screenHeight, "ĐỒ ÁN CARO - Raylib 5.0"); //
-    ToggleFullscreen();
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "ĐỒ ÁN CARO - Raylib 5.0"); //
     SetTargetFPS(60);
 
     // --- Khởi tạo các module ---
