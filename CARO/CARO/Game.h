@@ -8,6 +8,8 @@
 extern int g_board[BOARD_SIZE][BOARD_SIZE];
 extern bool g_turn;
 extern GameStatus g_status;
+extern int g_cursorX;
+extern int g_cursorY;
 
 // === Các hàm logic (từ Game.h cũ) ===
 void InitGame();      // Thay thế cho resetData
