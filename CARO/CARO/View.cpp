@@ -73,7 +73,14 @@ void DrawGameView() {
         DrawLine(BOARD_OFFSET_X + i * CELL_SIZE, BOARD_OFFSET_Y, BOARD_OFFSET_X + i * CELL_SIZE, BOARD_OFFSET_Y + BOARD_WIDTH, BOARD_LINE);
         DrawLine(BOARD_OFFSET_X, BOARD_OFFSET_Y + i * CELL_SIZE, BOARD_OFFSET_X + BOARD_WIDTH, BOARD_OFFSET_Y + i * CELL_SIZE, BOARD_LINE);
     }
-
+    //highlight ô
+    DrawRectangleLines(
+        BOARD_OFFSET_X + g_cursorX * CELL_SIZE,
+        BOARD_OFFSET_Y + g_cursorY * CELL_SIZE,
+        CELL_SIZE,
+        CELL_SIZE,
+        RED // màu viền
+    );
     // 4. Vẽ quân cờ (tương đương PrintCell)
     for (int y = 0; y < BOARD_SIZE; y++) {
         for (int x = 0; x < BOARD_SIZE; x++) {
@@ -108,5 +115,18 @@ void DrawGameView() {
         const char* restartText = "PRESS [Y] TO PLAY AGAIN";
         textWidth = MeasureText(restartText, 20);
         DrawText(restartText, (GetScreenWidth() - textWidth) / 2, GetScreenHeight() / 2 + 20, 20, WHITE);
+    }
+    //highlight ô
+    int hx = BOARD_OFFSET_X + g_cursorX * CELL_SIZE;
+    int hy = BOARD_OFFSET_Y + g_cursorY * CELL_SIZE;
+
+    for (int i = 0; i < 4; i++) {
+        DrawRectangleLines(
+            hx + i,
+            hy + i,
+            CELL_SIZE - 2 * i,
+            CELL_SIZE - 2 * i,
+            DARKBLUE
+        );
     }
 }
