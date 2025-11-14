@@ -1,9 +1,11 @@
-﻿#include "View.h"
+﻿#include <raylib.h>
+#include "View.h"
 #include "Game.h" // View cần đọc dữ liệu từ Game
 
 // Biến static để lưu trữ "sprite"
 static Texture2D texX;
 static Texture2D texO;
+static Font customFont;
 
 // "Thủ thuật" này tương đương với file Font.cpp của bạn
 // Nó tạo ra một Texture X bằng cách "vẽ" từng pixel
@@ -52,11 +54,13 @@ Texture2D GenOTexture(int size, Color color) {
 void InitGameView() {
     texX = GenXTexture(SPRITE_SIZE, MAROON); // Tương đương màu 12 (đỏ)
     texO = GenOTexture(SPRITE_SIZE, BLUE);   // Tương đương màu 9 (xanh)
+    customFont = LoadFontEx("resources/arial.ttf", 64, 0, 100000);
 }
 
 void UnloadGameView() {
     UnloadTexture(texX);
     UnloadTexture(texO);
+    UnloadFont(customFont);
 }
 
 // Hàm này vẽ toàn bộ màn hình game
@@ -88,8 +92,13 @@ void DrawGameView() {
 
     // 5. Vẽ thông tin (tương đương DrawPlayerInfo)
     const char* turnText = g_turn ? "[X] Player 1" : "[O] Player 2";
-    DrawText(TextFormat("Lượt của: %s", turnText), BOARD_OFFSET_X, BOARD_OFFSET_Y - 40, 20, WHITE);
-    DrawText("Nhấn [L] để Save", BOARD_OFFSET_X, BOARD_OFFSET_Y + BOARD_WIDTH + 15, 16, WHITE);
+    DrawTextEx(customFont,
+        TextFormat("Lượt của: %s", turnText),
+        Vector2{ (float)BOARD_OFFSET_X, (float)BOARD_OFFSET_Y - 40 }, 20.0f, 1.0f, WHITE); // (font, text, position, fontSize, spacing, color)
+
+    DrawTextEx(customFont,
+        "Nhấn [L] để Save",
+        Vector2{ (float)BOARD_OFFSET_X, (float)BOARD_OFFSET_Y + BOARD_WIDTH + 15 }, 16.0f, 1.0f, WHITE);
 
     // 6. Vẽ thông báo thắng (tương đương ShowWinner)
     if (g_status != PLAYING) {
@@ -102,11 +111,21 @@ void DrawGameView() {
         else if (g_status == DRAW) winnerText = "IT'S A DRAW!";
 
         // Đo lường text để căn giữa
-        int textWidth = MeasureText(winnerText, 40);
-        DrawText(winnerText, (GetScreenWidth() - textWidth) / 2, GetScreenHeight() / 2 - 40, 40, GOLD);
+        Vector2 textSize = MeasureTextEx(customFont, winnerText, 40.0f, 1.0f);
+
+        DrawTextEx(customFont,
+            winnerText,
+            Vector2{ (GetScreenWidth() - textSize.x) / 2, (float)(GetScreenHeight() / 2 - 40) },
+            40.0f, 1.0f, GOLD);
 
         const char* restartText = "PRESS [Y] TO PLAY AGAIN";
-        textWidth = MeasureText(restartText, 20);
-        DrawText(restartText, (GetScreenWidth() - textWidth) / 2, GetScreenHeight() / 2 + 20, 20, WHITE);
+
+        // Đo lường text để căn giữa
+        textSize = MeasureTextEx(customFont, restartText, 20.0f, 1.0f);
+
+        DrawTextEx(customFont,
+            restartText,
+            Vector2{ (GetScreenWidth() - textSize.x) / 2, (float)(GetScreenHeight() / 2 + 20) },
+            20.0f, 1.0f, WHITE);
     }
 }

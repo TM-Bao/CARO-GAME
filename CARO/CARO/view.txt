@@ -1,0 +1,112 @@
+#include "View.h"
+#include "Game.h" // View c?n ??c d? li?u t? Game
+
+// Bi?n static ?? l?u tr? "sprite"
+static Texture2D texX;
+static Texture2D texO;
+
+// "Th? thu?t" này t??ng ???ng v?i file Font.cpp c?a b?n
+// Nó t?o ra m?t Texture X b?ng cách "v?" t?ng pixel
+Texture2D GenXTexture(int size, Color color) {
+    Image img = GenImageColor(size, size, BLANK);
+    for (int i = 0; i < size; i++) {
+        ImageDrawPixel(&img, i, i, color);
+        ImageDrawPixel(&img, i, i + 1, color);
+        ImageDrawPixel(&img, i + 1, i, color);
+        ImageDrawPixel(&img, i, (size - 1) - i, color);
+        ImageDrawPixel(&img, i, (size - 1) - i + 1, color);
+        ImageDrawPixel(&img, i + 1, (size - 1) - i, color);
+    }
+    Texture2D tex = LoadTextureFromImage(img);
+    UnloadImage(img);
+    return tex;
+}
+// "Th? thu?t" t?o Texture O (Phiên b?n s?a, không dùng ImageDrawRing)
+Texture2D GenOTexture(int size, Color color) {
+    Image img = GenImageColor(size, size, BLANK);
+
+    // Chúng ta s? t? v? m?t cái vi?n vuông 2 pixel
+    // Gi?ng h?t cách b?n v? X, nh?ng là hình vuông
+    int padding = 4; // ?? l?i 4 pixel l?
+    int thickness = 2; // ?? dày 2 pixel
+
+    for (int t = 0; t < thickness; t++) {
+        // V? 4 c?nh
+        for (int i = padding; i < size - padding; i++) {
+            // C?nh trên
+            ImageDrawPixel(&img, i, padding + t, color);
+            // C?nh d??i
+            ImageDrawPixel(&img, i, (size - 1) - padding - t, color);
+            // C?nh trái
+            ImageDrawPixel(&img, padding + t, i, color);
+            // C?nh ph?i
+            ImageDrawPixel(&img, (size - 1) - padding - t, i, color);
+        }
+    }
+
+    Texture2D tex = LoadTextureFromImage(img);
+    UnloadImage(img);
+    return tex;
+}
+
+void InitGameView() {
+    texX = GenXTexture(SPRITE_SIZE, MAROON); // T??ng ???ng màu 12 (??)
+    texO = GenOTexture(SPRITE_SIZE, BLUE);   // T??ng ???ng màu 9 (xanh)
+}
+
+void UnloadGameView() {
+    UnloadTexture(texX);
+    UnloadTexture(texO);
+}
+
+// Hàm này v? toàn b? màn hình game
+void DrawGameView() {
+    // 1. V? n?n
+    ClearBackground(GRASS_GREEN);
+
+    // 2. V? khung và n?n bàn c? (t??ng ???ng DrawChessBoard)
+    DrawRectangle(BOARD_OFFSET_X - 10, BOARD_OFFSET_Y - 10, BOARD_WIDTH + 20, BOARD_WIDTH + 20, BOARD_FRAME);
+    DrawRectangle(BOARD_OFFSET_X, BOARD_OFFSET_Y, BOARD_WIDTH, BOARD_WIDTH, BOARD_BG);
+
+    // 3. V? ???ng k?
+    for (int i = 0; i <= BOARD_SIZE; i++) {
+        DrawLine(BOARD_OFFSET_X + i * CELL_SIZE, BOARD_OFFSET_Y, BOARD_OFFSET_X + i * CELL_SIZE, BOARD_OFFSET_Y + BOARD_WIDTH, BOARD_LINE);
+        DrawLine(BOARD_OFFSET_X, BOARD_OFFSET_Y + i * CELL_SIZE, BOARD_OFFSET_X + BOARD_WIDTH, BOARD_OFFSET_Y + i * CELL_SIZE, BOARD_LINE);
+    }
+
+    // 4. V? quân c? (t??ng ???ng PrintCell)
+    for (int y = 0; y < BOARD_SIZE; y++) {
+        for (int x = 0; x < BOARD_SIZE; x++) {
+            if (g_board[y][x] != EMPTY) {
+                float drawX = BOARD_OFFSET_X + x * CELL_SIZE + (CELL_SIZE - SPRITE_SIZE) / 2;
+                float drawY = BOARD_OFFSET_Y + y * CELL_SIZE + (CELL_SIZE - SPRITE_SIZE) / 2;
+                Texture2D texToDraw = (g_board[y][x] == X) ? texX : texO;
+                DrawTexture(texToDraw, drawX, drawY, WHITE);
+            }
+        }
+    }
+
+    // 5. V? thông tin (t??ng ???ng DrawPlayerInfo)
+    const char* turnText = g_turn ? "[X] Player 1" : "[O] Player 2";
+    DrawText(TextFormat("L??t c?a: %s", turnText), BOARD_OFFSET_X, BOARD_OFFSET_Y - 40, 20, WHITE);
+    DrawText("Nh?n [L] ?? Save", BOARD_OFFSET_X, BOARD_OFFSET_Y + BOARD_WIDTH + 15, 16, WHITE);
+
+    // 6. V? thông báo th?ng (t??ng ???ng ShowWinner)
+    if (g_status != PLAYING) {
+        // V? m?t l?p ph? m?
+        DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), CLITERAL(Color){ 0, 0, 0, 150 });
+
+        const char* winnerText = "";
+        if (g_status == X_WIN) winnerText = "PLAYER 1 WINS!";
+        else if (g_status == O_WIN) winnerText = "PLAYER 2 WINS!";
+        else if (g_status == DRAW) winnerText = "IT'S A DRAW!";
+
+        // ?o l??ng text ?? c?n gi?a
+        int textWidth = MeasureText(winnerText, 40);
+        DrawText(winnerText, (GetScreenWidth() - textWidth) / 2, GetScreenHeight() / 2 - 40, 40, GOLD);
+
+        const char* restartText = "PRESS [Y] TO PLAY AGAIN";
+        textWidth = MeasureText(restartText, 20);
+        DrawText(restartText, (GetScreenWidth() - textWidth) / 2, GetScreenHeight() / 2 + 20, 20, WHITE);
+    }
+}
