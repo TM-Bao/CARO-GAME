@@ -1,31 +1,39 @@
 ﻿#ifndef GLOBAL_H_
 #define GLOBAL_H_
 
-#include "raylib.h" // Thêm thư viện Raylib vào đây
+#include "raylib.h" 
+
+// === Kích thước màn hình ===
 const int SCREEN_WIDTH = 1920;
 const int SCREEN_HEIGHT = 950;
-// === Tinh chỉnh từ file Global.h cũ ===
-// 1. Kích thước logic (giữ nguyên từ file cũ)
-#define BOARD_SIZE 12 //
 
-// 2. Enums (giữ nguyên từ file cũ)
-enum Player { EMPTY = 0, X = -1, O = 1 }; //
-enum GameStatus { PLAYING, X_WIN, O_WIN, DRAW }; //
-// === Hằng số mới cho Raylib (thay thế LEFT, TOP) ===
-const int CELL_SIZE = 40;     // Kích thước mỗi ô
-const int SPRITE_SIZE = 32;   // Kích thước X, O
-const int BOARD_WIDTH = BOARD_SIZE * CELL_SIZE;
-const int BOARD_OFFSET_X = (SCREEN_WIDTH - BOARD_WIDTH) / 2;
-const int BOARD_OFFSET_Y = (SCREEN_HEIGHT - BOARD_WIDTH) / 2 - 100; // Đẩy lên cao 1 chút
+// === Logic Game ===
+#define BOARD_SIZE 12 
+enum Player { EMPTY = 0, X = -1, O = 1 };
+enum GameStatus { PLAYING, X_WIN, O_WIN, DRAW };
 
-// Màu sắc
-#define GRASS_GREEN CLITERAL(Color){ 34, 139, 34, 255 }
-#define BOARD_BG CLITERAL(Color){ 210, 180, 140, 255 }
-#define BOARD_FRAME CLITERAL(Color){ 139, 69, 19, 255 }
-#define BOARD_LINE CLITERAL(Color){ 101, 67, 33, 255 }
+// === KÍCH THƯỚC ĐÃ NÂNG CẤP ===
+const int CELL_SIZE = 60;     // Tăng từ 40 lên 60
+const int SPRITE_SIZE = 52;   // Tăng từ 32/48 lên 52
+const int BOARD_WIDTH = BOARD_SIZE * CELL_SIZE; // Tự động = 720
+const int BOARD_OFFSET_X = (SCREEN_WIDTH - BOARD_WIDTH) / 2; // Tự động = 600
+// Căn giữa theo chiều dọc
+const int BOARD_OFFSET_Y = (SCREEN_HEIGHT - BOARD_WIDTH) / 2;
 
-// === Trạng thái toàn cục của ứng dụng ===
-// Dùng để chuyển cảnh
+// === BẢNG MÀU HOÀN CHỈNH (Theo ảnh cuối) ===
+
+// 1. Nền ngoài (Theo ảnh cuối của bạn)
+#define HSR_BG LIGHTGRAY 
+
+// 2. Viền bàn cờ (Thiết kế 2 lớp)
+#define HSR_FRAME CLITERAL(Color){ 45, 55, 75, 255 }       // Viền chính, nền panel
+#define HSR_SUB_FRAME CLITERAL(Color){ 70, 85, 110, 255 }  // Viền phụ
+
+// 3. Màu ô cờ (Checkerboard)
+#define HSR_SQUARE_DARK CLITERAL(Color){ 60, 70, 90, 255 }
+#define HSR_SQUARE_LIGHT CLITERAL(Color){ 210, 220, 230, 255 }
+
+// === Trạng thái Game (Giữ nguyên) ===
 enum GameScreen { MENU, GAMEPLAY, ABOUT, SETTING };
 
-#endif // _GLOBAL_H_
+#endif // GLOBAL_H_
