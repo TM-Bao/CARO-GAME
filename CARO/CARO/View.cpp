@@ -1,12 +1,16 @@
-﻿#include "View.h"
-#include "Game.h" // View cần đọc dữ liệu từ Game
+﻿#include <raylib.h>
+#include "View.h"
+#include "Game.h" 
+
+// === THÊM MỚI: Chỉ thị compiler (đặt ngay sau #include) ===
+#pragma execution_character_set("utf-8")
 
 // Biến static để lưu trữ "sprite"
 static Texture2D texX;
 static Texture2D texO;
+static Font customFont;
 
-// "Thủ thuật" này tương đương với file Font.cpp của bạn
-// Nó tạo ra một Texture X bằng cách "vẽ" từng pixel
+// ... (Các hàm GenXTexture và GenOTexture giữ nguyên) ...
 Texture2D GenXTexture(int size, Color color) {
     Image img = GenImageColor(size, size, BLANK);
     for (int i = 0; i < size; i++) {
@@ -21,67 +25,53 @@ Texture2D GenXTexture(int size, Color color) {
     UnloadImage(img);
     return tex;
 }
-// "Thủ thuật" tạo Texture O (Phiên bản sửa, không dùng ImageDrawRing)
 Texture2D GenOTexture(int size, Color color) {
     Image img = GenImageColor(size, size, BLANK);
-
-    // Chúng ta sẽ tự vẽ một cái viền vuông 2 pixel
-    // Giống hệt cách bạn vẽ X, nhưng là hình vuông
-    int padding = 4; // Để lại 4 pixel lề
-    int thickness = 2; // Độ dày 2 pixel
+    int padding = 4;
+    int thickness = 2;
 
     for (int t = 0; t < thickness; t++) {
-        // Vẽ 4 cạnh
         for (int i = padding; i < size - padding; i++) {
-            // Cạnh trên
             ImageDrawPixel(&img, i, padding + t, color);
-            // Cạnh dưới
             ImageDrawPixel(&img, i, (size - 1) - padding - t, color);
-            // Cạnh trái
             ImageDrawPixel(&img, padding + t, i, color);
-            // Cạnh phải
             ImageDrawPixel(&img, (size - 1) - padding - t, i, color);
         }
     }
-
     Texture2D tex = LoadTextureFromImage(img);
     UnloadImage(img);
     return tex;
 }
 
 void InitGameView() {
-    texX = GenXTexture(SPRITE_SIZE, MAROON); // Tương đương màu 12 (đỏ)
-    texO = GenOTexture(SPRITE_SIZE, BLUE);   // Tương đương màu 9 (xanh)
+    texX = GenXTexture(SPRITE_SIZE, MAROON);
+    texO = GenOTexture(SPRITE_SIZE, BLUE);
+
+    // === SỬA LỖI: Tải 8000 ký tự (đủ cho tiếng Việt) ===
+    // (Bộ tiếng Việt mở rộng kết thúc ở codepoint 7919, nên 8000 là đủ)
+    customFont = LoadFontEx("resources/arial.ttf", 64, 0, 8000);
 }
 
 void UnloadGameView() {
     UnloadTexture(texX);
     UnloadTexture(texO);
+    UnloadFont(customFont);
 }
 
 // Hàm này vẽ toàn bộ màn hình game
 void DrawGameView() {
+    // ... (Phần 1, 2, 3, 4 vẽ bàn cờ và quân cờ giữ nguyên) ...
     // 1. Vẽ nền
     ClearBackground(GRASS_GREEN);
-
-    // 2. Vẽ khung và nền bàn cờ (tương đương DrawChessBoard)
+    // 2. Vẽ khung và nền bàn cờ
     DrawRectangle(BOARD_OFFSET_X - 10, BOARD_OFFSET_Y - 10, BOARD_WIDTH + 20, BOARD_WIDTH + 20, BOARD_FRAME);
     DrawRectangle(BOARD_OFFSET_X, BOARD_OFFSET_Y, BOARD_WIDTH, BOARD_WIDTH, BOARD_BG);
-
     // 3. Vẽ đường kẻ
     for (int i = 0; i <= BOARD_SIZE; i++) {
         DrawLine(BOARD_OFFSET_X + i * CELL_SIZE, BOARD_OFFSET_Y, BOARD_OFFSET_X + i * CELL_SIZE, BOARD_OFFSET_Y + BOARD_WIDTH, BOARD_LINE);
         DrawLine(BOARD_OFFSET_X, BOARD_OFFSET_Y + i * CELL_SIZE, BOARD_OFFSET_X + BOARD_WIDTH, BOARD_OFFSET_Y + i * CELL_SIZE, BOARD_LINE);
     }
-    //highlight ô
-    DrawRectangleLines(
-        BOARD_OFFSET_X + g_cursorX * CELL_SIZE,
-        BOARD_OFFSET_Y + g_cursorY * CELL_SIZE,
-        CELL_SIZE,
-        CELL_SIZE,
-        RED // màu viền
-    );
-    // 4. Vẽ quân cờ (tương đương PrintCell)
+    // 4. Vẽ quân cờ
     for (int y = 0; y < BOARD_SIZE; y++) {
         for (int x = 0; x < BOARD_SIZE; x++) {
             if (g_board[y][x] != EMPTY) {
@@ -95,38 +85,37 @@ void DrawGameView() {
 
     // 5. Vẽ thông tin (tương đương DrawPlayerInfo)
     const char* turnText = g_turn ? "[X] Player 1" : "[O] Player 2";
-    DrawText(TextFormat("Lượt của: %s", turnText), BOARD_OFFSET_X, BOARD_OFFSET_Y - 40, 20, WHITE);
-    DrawText("Nhấn [L] để Save", BOARD_OFFSET_X, BOARD_OFFSET_Y + BOARD_WIDTH + 15, 16, WHITE);
+
+    // === THÊM MỚI: Dùng u8"..." để đánh dấu chuỗi UTF-8 ===
+    DrawTextEx(customFont,
+        TextFormat(u8"Lượt của: %s", turnText),
+        Vector2{ (float)BOARD_OFFSET_X, (float)BOARD_OFFSET_Y - 40 }, 20.0f, 1.0f, WHITE);
+
+    // === THÊM MỚI: Dùng u8"..." ===
+    DrawTextEx(customFont,
+        u8"Nhấn [L] để Save",
+        Vector2{ (float)BOARD_OFFSET_X, (float)BOARD_OFFSET_Y + BOARD_WIDTH + 15 }, 16.0f, 1.0f, WHITE);
 
     // 6. Vẽ thông báo thắng (tương đương ShowWinner)
     if (g_status != PLAYING) {
-        // Vẽ một lớp phủ mờ
+        // ... (Phần này không có tiếng Việt, giữ nguyên) ...
         DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), CLITERAL(Color){ 0, 0, 0, 150 });
-
         const char* winnerText = "";
         if (g_status == X_WIN) winnerText = "PLAYER 1 WINS!";
         else if (g_status == O_WIN) winnerText = "PLAYER 2 WINS!";
         else if (g_status == DRAW) winnerText = "IT'S A DRAW!";
 
-        // Đo lường text để căn giữa
-        int textWidth = MeasureText(winnerText, 40);
-        DrawText(winnerText, (GetScreenWidth() - textWidth) / 2, GetScreenHeight() / 2 - 40, 40, GOLD);
+        Vector2 textSize = MeasureTextEx(customFont, winnerText, 40.0f, 1.0f);
+        DrawTextEx(customFont,
+            winnerText,
+            Vector2{ (GetScreenWidth() - textSize.x) / 2, (float)(GetScreenHeight() / 2 - 40) },
+            40.0f, 1.0f, GOLD);
 
         const char* restartText = "PRESS [Y] TO PLAY AGAIN";
-        textWidth = MeasureText(restartText, 20);
-        DrawText(restartText, (GetScreenWidth() - textWidth) / 2, GetScreenHeight() / 2 + 20, 20, WHITE);
-    }
-    //highlight ô
-    int hx = BOARD_OFFSET_X + g_cursorX * CELL_SIZE;
-    int hy = BOARD_OFFSET_Y + g_cursorY * CELL_SIZE;
-
-    for (int i = 0; i < 4; i++) {
-        DrawRectangleLines(
-            hx + i,
-            hy + i,
-            CELL_SIZE - 2 * i,
-            CELL_SIZE - 2 * i,
-            DARKBLUE
-        );
+        textSize = MeasureTextEx(customFont, restartText, 20.0f, 1.0f);
+        DrawTextEx(customFont,
+            restartText,
+            Vector2{ (GetScreenWidth() - textSize.x) / 2, (float)(GetScreenHeight() / 2 + 20) },
+            20.0f, 1.0f, WHITE);
     }
 }
