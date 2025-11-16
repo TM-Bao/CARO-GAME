@@ -6,11 +6,9 @@
 // Định nghĩa các biến toàn cục
 int g_board[BOARD_SIZE][BOARD_SIZE];
 bool g_turn;
-int g_cursorX = 0;  // cột 0
-int g_cursorY = 0;  // dòng 0
-float g_moveTimer = 0.0f;
-const float MOVE_DELAY = 0.15f; // 0.15 giây giữa 2 lần di chuyển
 GameStatus g_status;
+int g_cursorX;
+int g_cursorY;
 
 // Tương đương resetData
 void InitGame() {
@@ -21,7 +19,6 @@ void InitGame() {
     }
     g_turn = true; // X đi trước
     g_status = PLAYING;
-
     //Reset con trỏ WASD
     g_cursorX = BOARD_SIZE / 2;
     g_cursorY = BOARD_SIZE / 2;
@@ -29,7 +26,7 @@ void InitGame() {
 }
 
 // Hàm này được gọi 60 lần/giây
-void UpdateGame() {
+void UpdateGame(GameScreen& currentScreen) {
     // Chỉ xử lý khi game đang diễn ra
     if (g_status != PLAYING) {
         // Nếu game kết thúc, chờ nhấn Y để chơi lại
@@ -38,62 +35,48 @@ void UpdateGame() {
         }
         return;
     }
-    //Thời gina giữa các frame
-    float dt = GetFrameTime(); 
-    g_moveTimer += dt;
+    if (IsKeyPressed(KEY_W) && g_cursorY > 0)
+        g_cursorY--;
 
-    //Di chuyển bằng W A S D
-    if (g_moveTimer >= MOVE_DELAY) {
-        bool moved = false;
+    if (IsKeyPressed(KEY_S) && g_cursorY < BOARD_SIZE - 1)
+        g_cursorY++;
 
-        if (IsKeyDown(KEY_W) && g_cursorY > 0) {
-            g_cursorY--;
-            moved = true;
-        }
-        if (IsKeyDown(KEY_S) && g_cursorY < BOARD_SIZE - 1) {
-            g_cursorY++;
-            moved = true;
-        }
-        if (IsKeyDown(KEY_A) && g_cursorX > 0) {
-            g_cursorX--;
-            moved = true;
-        }
-        if (IsKeyDown(KEY_D) && g_cursorX < BOARD_SIZE - 1) {
-            g_cursorX++;
-            moved = true;
-        }
+    if (IsKeyPressed(KEY_A) && g_cursorX > 0)
+        g_cursorX--;
 
-        if (moved) g_moveTimer = 0.0f;
-    }
-
-
-    //Đánh cờ bằng ENTER
+    if (IsKeyPressed(KEY_D) && g_cursorX < BOARD_SIZE - 1)
+        g_cursorX++;
     if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE)) {
-        if (CheckAndPlace(g_cursorX, g_cursorY)) {
-            g_status = TestBoard();  // kiểm tra thắng
 
+        if (CheckAndPlace(g_cursorX, g_cursorY)) {
+            g_status = TestBoard();
             if (g_status == PLAYING)
-                g_turn = !g_turn; // đổi lượt
+                g_turn = !g_turn;
         }
     }
-
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         Vector2 mousePos = GetMousePosition();
 
-        int cellX = (int)floor((mousePos.x - BOARD_OFFSET_X) / (float)CELL_SIZE);
-        int cellY = (int)floor((mousePos.y - BOARD_OFFSET_Y) / (float)CELL_SIZE);
+        // Chuyển đổi tọa độ chuột sang tọa độ ô (i, j)
+        int cellX = (mousePos.x - BOARD_OFFSET_X) / CELL_SIZE;
+        int cellY = (mousePos.y - BOARD_OFFSET_Y) / CELL_SIZE;
 
+        // Nếu click hợp lệ, gọi hàm logic
         if (cellX >= 0 && cellX < BOARD_SIZE && cellY >= 0 && cellY < BOARD_SIZE) {
-            // Đồng bộ con trỏ với vị trí click để highlight "ăn khớp"
             g_cursorX = cellX;
             g_cursorY = cellY;
-
+            // "checkBoard" logic
             if (CheckAndPlace(cellX, cellY)) {
+                // Nếu đặt cờ thành công, kiểm tra thắng
                 g_status = TestBoard();
-                if (g_status == PLAYING) g_turn = !g_turn;
+
+                if (g_status == PLAYING) {
+                    g_turn = !g_turn; // Đổi lượt
+                }
             }
         }
     }
+
     // Xử lý save/load
     if (IsKeyPressed(KEY_L)) { // Tương đương 'L'
         saveGame("save.txt");
@@ -156,6 +139,4 @@ void loadGame(const std::string& filename) {
     f >> g_turn;
     f.close();
     g_status = PLAYING; // Sẵn sàng chơi
-    g_cursorX = 0;
-    g_cursorY = 0;
 }

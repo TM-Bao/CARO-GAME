@@ -8,6 +8,7 @@ int main(void) {
     // --- Khởi tạo (từ Main.cpp cũ) ---
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "ĐỒ ÁN CARO - Raylib 5.0"); //
     SetTargetFPS(60);
+    SetExitKey(KEY_NULL);
 
     // --- Khởi tạo các module ---
     GameScreen currentScreen = MENU;
@@ -26,7 +27,7 @@ int main(void) {
             UpdateMenu(currentScreen);
             break;
         case GAMEPLAY:
-            UpdateGame();
+            UpdateGame(currentScreen);
             // Cho phép quay về Menu
             if (IsKeyPressed(KEY_ESCAPE)) {
                 currentScreen = MENU;
