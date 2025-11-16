@@ -30,3 +30,5 @@ void UpdateSetting(GameScreen& currentScreen);
 void UnloadAllTextures();
 
 #endif // _MENU_H_
+
+
