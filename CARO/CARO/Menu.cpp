@@ -3,7 +3,15 @@
 #include "raylib.h"
 int g_menuChoice = 0; //
 const char* MENU_ITEMS[] = { "NEW GAME", "LOAD GAME", "ABOUT", "SETTING", "EXIT" };
+const char* MEMBERS[][3] = { 
+    {"TUAN HUNG", "SOK MINH", "TRUONG GIANG"},
+    {"GIA BAO", "QUOC ANH", "DUC THINH"} 
+};
+const char* TOOLS[] = { "C++", "RAYLIB" };
 const int MENU_COUNT = 5;
+const int MEMBERS_ROW = 2;
+const int MEMBERS_COL = 3;
+const int TOOLS_COUNT = 2;
 std::map<std::string, Texture2D> game_textures; // Map luu theo Key: Value;
 
 
@@ -15,6 +23,7 @@ void InitMenu() {
     game_textures["X_icon"] = LoadTexture("assects/images/X_intro.png");
     game_textures["O_icon"] = LoadTexture("assects/images/O_intro.png");
     game_textures["choosen_arrow"] = LoadTexture("assects/images/arrow_menu.png");
+    game_textures["about_bg"] = LoadTexture("assects/images/bg_about.png");
     SetTextureFilter(game_textures["background"], TEXTURE_FILTER_POINT);
 }
 
@@ -130,11 +139,43 @@ void UpdateAbout(GameScreen& currentScreen) {
         currentScreen = MENU;
     }
 }
-void DrawAbout() { //
+void DrawAbout() { 
     ClearBackground(WHITE);
-    DrawText("CARO GAME", 50, 100, 40, WHITE);
-    DrawText("Developed by [TEAM 2]", 50, 160, 20, GRAY);
-    DrawText("Press [ESC] or [ENTER] to return...", 50, 300, 20, SKYBLUE);
+    Texture2D bg = game_textures["about_bg"];
+    Rectangle bgSource = { 0.0, 0.0, (float)bg.width, (float)bg.height };
+    Rectangle bgDest = { 0.0, 0.0, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT };
+    DrawTexturePro(bg, bgSource, bgDest, { 0, 0 }, 0.0, WHITE);
+
+    int titleText = MeasureText("CARO GAME", 180);
+    int title_posX = (SCREEN_WIDTH - titleText) / 2;
+    int title_posY = 80;
+
+    int header1 = MeasureText("DEVELOPED BY [TEAM 2]", 60);
+    int header1_posX = (SCREEN_WIDTH - header1) / 2;
+    int header1_posY = 325;
+
+    DrawTextAndBorder("CARO GAME", title_posX, title_posY, 180, 8, WHITE, YELLOW);
+    DrawTextAndBorder("DEVELOPED BY [TEAM 2]", header1_posX, header1_posY, 60, 5, SKYBLUE, RED);
+
+    for (int i = 0; i < MEMBERS_ROW; i++) {
+        int posY = header1_posY + 80;
+        if (i == 1) posY += 60;
+        for (int j = 0; j < MEMBERS_COL; j++) {
+            int posX = 370 + 400 * j;
+            DrawTextAndBorder(MEMBERS[i][j], posX, posY, 50, 5, BLACK, WHITE);
+        }
+    }
+
+    int header2 = MeasureText("TECHNOLOGY USED", 60);
+    int header2_posX = (SCREEN_WIDTH - header2) / 2;
+    int header2_posY = 550;
+    DrawTextAndBorder("TECHNOLOGY USED", header2_posX, header2_posY, 60, 5, SKYBLUE, RED);
+
+    for (int i = 0; i < TOOLS_COUNT; i++) {
+        int posX = 600 + 600 * i;
+        int posY = header2_posY + 90;
+        DrawTextAndBorder(TOOLS[i], posX, posY, 50, 5, BLACK, WHITE);
+    }
 }
 
 // --- Màn hình Setting ---
