@@ -1,5 +1,5 @@
 ﻿#include "Menu.h"
-#include "Game.h" // Menu cần gọi loadGame
+#include "Game.h" 
 #include "raylib.h"
 int g_menuChoice = 0; //
 const char* MENU_ITEMS[] = { "NEW GAME", "LOAD GAME", "ABOUT", "SETTING", "EXIT" };
@@ -12,7 +12,7 @@ const int MENU_COUNT = 5;
 const int MEMBERS_ROW = 2;
 const int MEMBERS_COL = 3;
 const int TOOLS_COUNT = 2;
-std::map<std::string, Texture2D> game_textures; // Map luu theo Key: Value;
+std::map<std::string, Texture2D> game_textures; 
 
 
 void InitMenu() {
@@ -23,13 +23,11 @@ void InitMenu() {
     game_textures["X_icon"] = LoadTexture("assects/images/X_intro.png");
     game_textures["O_icon"] = LoadTexture("assects/images/O_intro.png");
     game_textures["choosen_arrow"] = LoadTexture("assects/images/arrow_menu.png");
-    game_textures["about_bg"] = LoadTexture("assects/images/bg_about.png");
+    game_textures["about_bg"] = LoadTexture("assects/images/setting_bg.png");
     SetTextureFilter(game_textures["background"], TEXTURE_FILTER_POINT);
 }
 
-// Hàm này cập nhật logic menu
 void UpdateMenu(GameScreen& currentScreen) {
-    // Input tương đương _getch()
     if (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_UP)) {
         g_menuChoice = (g_menuChoice == 0) ? MENU_COUNT - 1 : g_menuChoice - 1;
     }
@@ -40,11 +38,11 @@ void UpdateMenu(GameScreen& currentScreen) {
     if (IsKeyPressed(KEY_ENTER)) { //
         switch (g_menuChoice) {
         case 0: // NEW GAME
-            InitGame(); // Chuẩn bị game mới
+            InitGame(); 
             currentScreen = GAMEPLAY;
             break;
         case 1: // LOAD GAME
-            loadGame("save.txt"); //
+            loadGame("save.txt"); 
             currentScreen = GAMEPLAY;
             break;
         case 2: // ABOUT
@@ -53,49 +51,33 @@ void UpdateMenu(GameScreen& currentScreen) {
         case 3: // SETTING
             currentScreen = SETTING;
             break;
-        case 4: // EXIT
-            // Sẽ được xử lý trong main.cpp (WindowShouldClose)
-            // Hoặc chúng ta có thể set 1 flag
-            // Để đơn giản, ta sẽ để main.cpp tự thoát
-            // Nhưng nếu muốn, bạn có thể tạo 1 biến bool g_shouldExit
+        case 4: //EXIT
             break;
         }
     }
 }
 
-// Hàm này vẽ menu, thay thế DrawMenuScreen
 void DrawMenu() {
     ClearBackground(WHITE);
 
     Texture2D bg = game_textures["background"];
     Rectangle RectSource = { 0.0, 0.0, (float)bg.width, (float)bg.height };
-    // ⭐️ SỬA LẠI: Dùng kích thước cố định
     Rectangle RectDest = { 0.0, 0.0, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT };
     DrawTexturePro(bg, RectSource, RectDest, Vector2{ 0,0 }, 0, WHITE);
 
-    // Tương đương DrawString
     int titleWidth = MeasureText("CARO GAME", 180);
-    // ⭐️ SỬA LẠI: Dùng kích thước cố định
     int title_posX = (SCREEN_WIDTH - titleWidth) / 2;
     int title_posY = 50;
     DrawTextAndBorder("CARO GAME", title_posX, title_posY, 180, 15, RED, SKYBLUE);
-
-    // ⭐️ "THỦ THUẬT" 1: VẼ ẢNH TRƯỚC KHI VẼ CHỮ
-    // (Chúng ta chuyển DrawImage() từ cuối hàm lên đây)
     DrawImage();
 
-    // ⭐️ "THỦ THUẬT" 2: CĂN CHỈNH LẠI VỊ TRÍ Y CỦA MENU
-    int menu_start_y = 350; // Bắt đầu ở Y=450 (thay vì 600)
-    int menu_spacing = 100;  // Giãn cách 90 (thay vì 200)
-
-    // Vẽ các lựa chọn  
+    int menu_start_y = 350; 
+    int menu_spacing = 100;  
     for (int i = 0; i < MENU_COUNT; i++) {
         Color TColor = (i == g_menuChoice) ? YELLOW : LIGHTGRAY;
         Color BColor = (i == g_menuChoice) ? DARKPURPLE : BLACK;
         int textWidth = MeasureText(MENU_ITEMS[i], 100);
-        // ⭐️ SỬA LẠI: Dùng kích thước cố định
         int text_x_position = (SCREEN_WIDTH - textWidth) / 2;
-        // ⭐️ SỬA LẠI Y:
         int text_y_position = menu_start_y + i * menu_spacing;
         int text_xend_position = (text_x_position + textWidth);
         DrawTextAndBorder(MENU_ITEMS[i], text_x_position, text_y_position, 100, 10, BColor, TColor);
@@ -113,12 +95,9 @@ void DrawMenuArrow(Vector2 LeftArrow, Vector2 RightArrow) {
 }
 
 void DrawImage() {
-
     Vector2 cerydra_position = { 100, 600 };
-    // ⭐️ SỬA LẠI: Dùng kích thước cố định
     Vector2 silverwolf_position = { SCREEN_WIDTH - 1050, 600 };
     Vector2 O_position = { 120, 0 };
-    // ⭐️ SỬA LẠI: Dùng kích thước cố định
     Vector2 X_position = { SCREEN_WIDTH - 380, 15 };
 
     DrawTextureEx(game_textures["O_icon"], O_position, 0, 0.5, WHITE);
@@ -133,64 +112,66 @@ void DrawTextAndBorder(const char* text, int posX, int posY, int Size, int Outli
     DrawText(text, posX, posY, Size, TColor);
 }
 
-// --- Màn hình About ---
+//Màn hình About
 void UpdateAbout(GameScreen& currentScreen) {
     if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_ENTER)) {
         currentScreen = MENU;
     }
 }
-void DrawAbout() { 
+void DrawAbout() {
     ClearBackground(WHITE);
     Texture2D bg = game_textures["about_bg"];
     Rectangle bgSource = { 0.0, 0.0, (float)bg.width, (float)bg.height };
     Rectangle bgDest = { 0.0, 0.0, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT };
     DrawTexturePro(bg, bgSource, bgDest, { 0, 0 }, 0.0, WHITE);
-
-    int titleText = MeasureText("CARO GAME", 180);
-    int title_posX = (SCREEN_WIDTH - titleText) / 2;
-    int title_posY = 80;
-
-    int header1 = MeasureText("DEVELOPED BY [TEAM 2]", 60);
-    int header1_posX = (SCREEN_WIDTH - header1) / 2;
-    int header1_posY = 325;
-
-    DrawTextAndBorder("CARO GAME", title_posX, title_posY, 180, 8, WHITE, YELLOW);
-    DrawTextAndBorder("DEVELOPED BY [TEAM 2]", header1_posX, header1_posY, 60, 5, SKYBLUE, RED);
-
+    float panelWidth = 1200;
+    float panelHeight = 800;
+    float panelX = (SCREEN_WIDTH - panelWidth) / 2;
+    float panelY = (SCREEN_HEIGHT - panelHeight) / 2;
+    float centerX = SCREEN_WIDTH / 2;
+    DrawRectangle(panelX, panelY, panelWidth, panelHeight, Fade(CLITERAL(Color) { 10, 20, 40, 255 }, 0.9f));
+    DrawRectangleLinesEx(Rectangle{ panelX, panelY, panelWidth, panelHeight }, 5.0f, SKYBLUE);
+    DrawRectangleLinesEx(Rectangle{ panelX + 10, panelY + 10, panelWidth - 20, panelHeight - 20 }, 2.0f, DARKBLUE);
+    const char* mainTitle = "CARO GAME";
+    int mainTitleSize = 100; 
+    DrawText(mainTitle, centerX - MeasureText(mainTitle, mainTitleSize) / 2 + 6, panelY + 60, mainTitleSize, BLACK);
+    DrawText(mainTitle, centerX - MeasureText(mainTitle, mainTitleSize) / 2, panelY + 50, mainTitleSize, YELLOW);
+    int currentY = panelY + 180; 
+    const char* teamTitle = "DEVELOPED BY [TEAM 2]";
+    int headerSize = 40; 
+    int nameSize = 32;   
+    DrawText(teamTitle, centerX - MeasureText(teamTitle, headerSize) / 2, currentY, headerSize, SKYBLUE);
+    currentY += 60; 
+    int colSpacing = 380;
     for (int i = 0; i < MEMBERS_ROW; i++) {
-        int posY = header1_posY + 80;
-        if (i == 1) posY += 60;
-        for (int j = 0; j < MEMBERS_COL; j++) {
-            int posX = 370 + 400 * j;
-            DrawTextAndBorder(MEMBERS[i][j], posX, posY, 50, 5, BLACK, WHITE);
-        }
+        const char* name1 = MEMBERS[i][0];
+        const char* name2 = MEMBERS[i][1];
+        const char* name3 = MEMBERS[i][2];
+        DrawText(name1, centerX - colSpacing - MeasureText(name1, nameSize) / 2, currentY, nameSize, WHITE);
+        DrawText(name2, centerX - MeasureText(name2, nameSize) / 2, currentY, nameSize, WHITE);
+        DrawText(name3, centerX + colSpacing - MeasureText(name3, nameSize) / 2, currentY, nameSize, WHITE);
+        currentY += 50; 
     }
-
-    int header2 = MeasureText("TECHNOLOGY USED", 60);
-    int header2_posX = (SCREEN_WIDTH - header2) / 2;
-    int header2_posY = 550;
-    DrawTextAndBorder("TECHNOLOGY USED", header2_posX, header2_posY, 60, 5, SKYBLUE, RED);
-
-    for (int i = 0; i < TOOLS_COUNT; i++) {
-        int posX = 600 + 600 * i;
-        int posY = header2_posY + 90;
-        DrawTextAndBorder(TOOLS[i], posX, posY, 50, 5, BLACK, WHITE);
-    }
+    currentY += 50; 
+    const char* instrTitle = "INSTRUCTOR";
+    const char* instrName = "TRUONG TOAN THINH";
+    DrawText(instrTitle, centerX - MeasureText(instrTitle, headerSize) / 2, currentY, headerSize, SKYBLUE);
+    currentY += 60;
+    int instrNameSize = 55;
+    DrawText(instrName, centerX - MeasureText(instrName, instrNameSize) / 2, currentY, instrNameSize, GOLD);
+    currentY += 100; 
+    const char* techTitle = "TECHNOLOGY USED";
+    DrawText(techTitle, centerX - MeasureText(techTitle, headerSize) / 2, currentY, headerSize, SKYBLUE);
+    currentY += 60;
+    int techSize = 45;
+    int techSpacing = 180; 
+    DrawText(TOOLS[0], centerX - techSpacing - MeasureText(TOOLS[0], techSize) / 2, currentY, techSize, WHITE);
+    DrawText("|", centerX - MeasureText("|", techSize) / 2, currentY, techSize, DARKGRAY);
+    DrawText(TOOLS[1], centerX + techSpacing - MeasureText(TOOLS[1], techSize) / 2, currentY, techSize, WHITE);
+    const char* footer = "Press [ESC] to Return Menu";
+    int footerSize = 30;
+    DrawText(footer, centerX - MeasureText(footer, footerSize) / 2, panelY + panelHeight - 50, footerSize, GRAY);
 }
-
-// --- Màn hình Setting ---
-void UpdateSetting(GameScreen& currentScreen) {
-    if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_ENTER)) {
-        currentScreen = MENU;
-    }
-}
-void DrawSetting() { //
-    ClearBackground(WHITE);
-    DrawText("This feature is developing!!", 50, 100, 40, WHITE);
-    DrawText("Press [ESC] or [ENTER] to return...", 50, 300, 20, SKYBLUE);
-}
-
-// Clear All Textures
 void UnloadAllTextures() {
     for (auto pair : game_textures) {
         UnloadTexture(pair.second);

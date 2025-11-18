@@ -2,7 +2,7 @@
 #define _GAME_H_
 
 #include "Global.h"
-#include <string> // (cho save/load)
+#include <string> 
 #include <map>
 
 extern int g_board[BOARD_SIZE][BOARD_SIZE];
@@ -11,13 +11,13 @@ extern GameStatus g_status;
 extern int g_cursorX;
 extern int g_cursorY;
 
-// === Các hàm logic (từ Game.extern int g_cursorX;h cũ) ===
-void InitGame();      // Thay thế cho resetData
-void UpdateGame(GameScreen& currentScreen);    // Xử lý input và logic cho màn hình game
-GameStatus TestBoard();
-bool CheckAndPlace(int cellX, int cellY); // Kết hợp logic checkBoard
 
-// Các hàm save/load
+void InitGame();      
+void UpdateGame(GameScreen& currentScreen);    
+GameStatus TestBoard();
+bool CheckAndPlace(int cellX, int cellY); 
+
+
 void saveGame(const std::string& filename);
 void loadGame(const std::string& filename);
 
