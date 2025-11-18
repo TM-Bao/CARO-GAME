@@ -6,29 +6,29 @@
 #include <map>
 #include "raylib.h"
 
-// Biến extern lưu lựa chọn (từ Global.h cũ)
-extern int g_menuChoice; //
 
-// Map extern lưu trữ các textures (từ menu.cpp)
+extern int g_menuChoice; 
+
+
 extern std::map<std::string, Texture2D> game_textures;
 
-// Các hàm cho màn hình menu
+//Màn hình Menu
 void InitMenu();
-void UpdateMenu(GameScreen& currentScreen); // Cập nhật logic menu
+void UpdateMenu(GameScreen& currentScreen); 
 void DrawMenu();   // Vẽ menu
 void DrawMenuArrow(Vector2 LeftArrow, Vector2 RightArrow);
 void DrawImage();
 void DrawTextAndBorder(const char* text, int posX, int posY, int Size, int Outline, Color BColor, Color TColor);
 
-// Các màn hình con
+
 void DrawAbout();
 void UpdateAbout(GameScreen& currentScreen);
 void DrawSetting();
 void UpdateSetting(GameScreen& currentScreen);
 
-// Hàm xóa toàn bộ textures trước khi thoát
+//Xóa tài nguyên
 void UnloadAllTextures();
 
-#endif // _MENU_H_
+#endif 
 
 

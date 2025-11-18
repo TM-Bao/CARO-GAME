@@ -3,32 +3,26 @@
 #include "Menu.h"
 #include "Game.h"
 #include "View.h"
+#include "settings.h"
 
 int main(void) {
-    // --- Khởi tạo (từ Main.cpp cũ) ---
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "ĐỒ ÁN CARO - Raylib 5.0"); //
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "CARO GAME"); //
     SetTargetFPS(60);
     SetExitKey(KEY_NULL);
-
-    // --- Khởi tạo các module ---
     GameScreen currentScreen = MENU;
+
+
     InitMenu();
     InitGameView();
-    // InitGame() sẽ được gọi khi nhấn "New Game"
+    InitSetting();
 
-    // --- Vòng lặp chính (thay thế while(true)) ---
     while (!WindowShouldClose()) {
-
-        //-----------------------------------------------------
-        // UPDATE (Xử lý Logic)
-        //-----------------------------------------------------
         switch (currentScreen) {
         case MENU:
             UpdateMenu(currentScreen);
             break;
         case GAMEPLAY:
             UpdateGame(currentScreen);
-            // Cho phép quay về Menu
             if (IsKeyPressed(KEY_ESCAPE)) {
                 currentScreen = MENU;
             }
@@ -40,15 +34,10 @@ int main(void) {
             UpdateSetting(currentScreen);
             break;
         }
-
-        // Thoát game nếu ở menu và chọn EXIT
         if (currentScreen == MENU && g_menuChoice == 4 && IsKeyPressed(KEY_ENTER)) {
-            break; // Thoát vòng lặp while
+            break;
         }
 
-        //-----------------------------------------------------
-        // DRAW (Xử lý Đồ họa)
-        //-----------------------------------------------------
         BeginDrawing();
 
         switch (currentScreen) {
@@ -68,10 +57,10 @@ int main(void) {
 
         EndDrawing();
     }
-
-    // --- Dọn dẹp ---
-    UnloadGameView(); // Giải phóng textures
+//Dọn dẹp
+    UnloadGameView();
     UnloadAllTextures();
+    UnloadSetting();
     CloseWindow();
 
     return 0;
