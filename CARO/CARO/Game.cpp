@@ -3,7 +3,7 @@
 #include <fstream> //
 #include <iostream> //
 #include "settings.h"
-
+#include "Audio.h"
 
 int g_board[BOARD_SIZE][BOARD_SIZE];
 bool g_turn;

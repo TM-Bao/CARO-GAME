@@ -1,6 +1,6 @@
 ﻿#include "settings.h"
 #include "raylib.h"
-
+#include "Audio.h"
 
 AppSettings g_settings;      
 static int settingCursor = 0; 
@@ -49,6 +49,8 @@ void UpdateSetting(GameScreen& currentScreen) {
 
             if (g_settings.musicVolume < 0) g_settings.musicVolume = 0;
             if (g_settings.musicVolume > 100) g_settings.musicVolume = 100;
+            extern Music bgMusic;
+            SetMusicVolume(bgMusic, (float)g_settings.musicVolume / 100.0f);
         }
  
         else if (settingCursor == 2) {

@@ -4,19 +4,23 @@
 #include "Game.h"
 #include "View.h"
 #include "settings.h"
+#include "Audio.h"
 
 int main(void) {
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "CARO GAME"); //
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "CARO GAME"); 
     SetTargetFPS(60);
     SetExitKey(KEY_NULL);
     GameScreen currentScreen = MENU;
 
 
     InitMenu();
+	InitAudioDevice();
+	InitAudio();
     InitGameView();
     InitSetting();
 
     while (!WindowShouldClose()) {
+        UpdateMusicStream(bgMusic);
         switch (currentScreen) {
         case MENU:
             UpdateMenu(currentScreen);
@@ -62,6 +66,6 @@ int main(void) {
     UnloadAllTextures();
     UnloadSetting();
     CloseWindow();
-
+	UnloadAudio();
     return 0;
 }
