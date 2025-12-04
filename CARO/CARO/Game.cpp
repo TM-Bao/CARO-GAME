@@ -39,9 +39,19 @@ void UpdateGame(GameScreen& currentScreen) {
         if (IsKeyPressed(KEY_D) && g_cursorX < BOARD_SIZE - 1) g_cursorX++;
         if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE)) {
             if (CheckAndPlace(g_cursorX, g_cursorY)) {
+                if (g_settings.soundEnable) {
+                    PlaySound(fxMove);
+                }
                 g_status = TestBoard();
+				if (g_settings.soundEnable) PlaySound(fxMove);
                 if (g_status == PLAYING) g_turn = !g_turn;
+                else if (g_settings.soundEnable && (g_status == X_WIN || g_status == O_WIN)) {
+                    if (g_settings.soundEnable) {
+                        PlaySound(fxWin);
+                    }
+				}
             }
+
         }
     }
 //XỬ LÝ LOGIC CHƠI BẰNG CHUỘT
@@ -56,8 +66,14 @@ void UpdateGame(GameScreen& currentScreen) {
 
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                 if (CheckAndPlace(cellX, cellY)) {
+                    if (g_settings.soundEnable) PlaySound(fxMove);
                     g_status = TestBoard();
                     if (g_status == PLAYING) g_turn = !g_turn;
+                    else if (g_settings.soundEnable && (g_status == X_WIN || g_status == O_WIN)) {
+                        if (g_settings.soundEnable) {
+                            PlaySound(fxWin);
+                        }
+                    }
                 }
             }
         }
