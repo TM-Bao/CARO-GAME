@@ -26,6 +26,20 @@ void InitGame() {
 
 }
 
+//XỬ LÍ DI CHUYỂN ĐỘC LẬP: WADS_X , ↑ ↓ ← →_Y
+void Movement_X(int& cursorX, int& cursorY) {
+    if (IsKeyPressed(KEY_W) && cursorY > 0) cursorY--;
+    if (IsKeyPressed(KEY_S) && cursorY < BOARD_SIZE - 1) cursorY++;
+    if (IsKeyPressed(KEY_A) && cursorX > 0) cursorX--;
+    if (IsKeyPressed(KEY_D) && cursorX < BOARD_SIZE - 1) cursorX++;
+}
+void Movement_Y(int& cursorX, int& cursorY) {
+    if (IsKeyPressed(KEY_UP) && cursorY > 0) cursorY--;
+    if (IsKeyPressed(KEY_DOWN) && cursorY < BOARD_SIZE - 1) cursorY++;
+    if (IsKeyPressed(KEY_LEFT) && cursorX > 0) cursorX--;
+    if (IsKeyPressed(KEY_RIGHT) && cursorX < BOARD_SIZE - 1) cursorX++;
+}
+
 void UpdateGame(GameScreen& currentScreen) {
     if (g_status != PLAYING) {
         if (IsKeyPressed(KEY_Y)) InitGame();
@@ -33,10 +47,8 @@ void UpdateGame(GameScreen& currentScreen) {
     }
 //XỬ LÝ LOGIC CHƠI BẰNG BÀN PHÍM
     if (g_settings.inputMode == INPUT_KEYBOARD) {
-        if (IsKeyPressed(KEY_W) && g_cursorY > 0) g_cursorY--;
-        if (IsKeyPressed(KEY_S) && g_cursorY < BOARD_SIZE - 1) g_cursorY++;
-        if (IsKeyPressed(KEY_A) && g_cursorX > 0) g_cursorX--;
-        if (IsKeyPressed(KEY_D) && g_cursorX < BOARD_SIZE - 1) g_cursorX++;
+        if (g_turn) Movement_X(g_cursorX, g_cursorY); //X
+        else Movement_Y(g_cursorX, g_cursorY);  //O
         if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE)) {
             if (CheckAndPlace(g_cursorX, g_cursorY)) {
                 if (g_settings.soundEnable) {
