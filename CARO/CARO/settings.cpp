@@ -39,7 +39,6 @@ void UpdateSetting(GameScreen& currentScreen) {
             else
                 g_settings.inputMode = INPUT_KEYBOARD;
         }
-// Chưa add nhạc
         else if (settingCursor == 1) {
             if (IsKeyPressed(KEY_A) || IsKeyPressed(KEY_LEFT))
                 g_settings.musicVolume -= 10;
@@ -50,7 +49,8 @@ void UpdateSetting(GameScreen& currentScreen) {
             if (g_settings.musicVolume < 0) g_settings.musicVolume = 0;
             if (g_settings.musicVolume > 100) g_settings.musicVolume = 100;
             extern Music bgMusic;
-            SetMusicVolume(bgMusic, (float)g_settings.musicVolume / 100.0f);
+            float finalVolume = ((float)g_settings.musicVolume / 100.0f) * 0.5f;
+            SetMusicVolume(bgMusic, finalVolume);
         }
  
         else if (settingCursor == 2) {
