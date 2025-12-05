@@ -28,16 +28,50 @@ void InitGame() {
 
 //XỬ LÍ DI CHUYỂN ĐỘC LẬP: WADS_X , ↑ ↓ ← →_Y
 void Movement_X(int& cursorX, int& cursorY) {
-    if (IsKeyPressed(KEY_W) && cursorY > 0) cursorY--;
-    if (IsKeyPressed(KEY_S) && cursorY < BOARD_SIZE - 1) cursorY++;
-    if (IsKeyPressed(KEY_A) && cursorX > 0) cursorX--;
-    if (IsKeyPressed(KEY_D) && cursorX < BOARD_SIZE - 1) cursorX++;
+    static float time = 0;
+    time -= GetFrameTime();
+
+    if (time <= 0) {
+        if (IsKeyDown(KEY_W) && cursorY > 0) {
+            cursorY--;
+            time = 0.12f;
+        }
+        if (IsKeyDown(KEY_S) && cursorY < BOARD_SIZE - 1) {
+            cursorY++;
+            time = 0.12f;
+        }
+        if (IsKeyDown(KEY_A) && cursorX > 0) {
+            cursorX--;
+            time = 0.12f;
+        }
+        if (IsKeyDown(KEY_D) && cursorX < BOARD_SIZE - 1) {
+            cursorX++;
+            time = 0.12f;
+        }
+    }
 }
 void Movement_Y(int& cursorX, int& cursorY) {
-    if (IsKeyPressed(KEY_UP) && cursorY > 0) cursorY--;
-    if (IsKeyPressed(KEY_DOWN) && cursorY < BOARD_SIZE - 1) cursorY++;
-    if (IsKeyPressed(KEY_LEFT) && cursorX > 0) cursorX--;
-    if (IsKeyPressed(KEY_RIGHT) && cursorX < BOARD_SIZE - 1) cursorX++;
+    static float time = 0;
+    time -= GetFrameTime();
+
+    if (time <= 0) {
+        if (IsKeyDown(KEY_UP) && cursorY > 0) {
+            cursorY--;
+            time = 0.12f;
+        }
+        if (IsKeyDown(KEY_DOWN) && cursorY < BOARD_SIZE - 1) {
+            cursorY++;
+            time = 0.12f;
+        }
+        if (IsKeyDown(KEY_LEFT) && cursorX > 0) {
+            cursorX--;
+            time = 0.12f;
+        }
+        if (IsKeyDown(KEY_RIGHT) && cursorX < BOARD_SIZE - 1) {
+            cursorX++;
+            time = 0.12f;
+        }
+    }
 }
 
 void UpdateGame(GameScreen& currentScreen) {
