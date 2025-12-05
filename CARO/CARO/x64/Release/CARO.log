@@ -1,6 +1,5 @@
-﻿  Game.cpp
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Game.cpp(60,19): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Game.cpp(61,19): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+﻿  Audio.cpp
+  Main.cpp
   Generating code
   2 of 309 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
