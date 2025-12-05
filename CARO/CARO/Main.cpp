@@ -18,7 +18,9 @@ int main(void) {
 	InitAudio();
     InitGameView();
     InitSetting();
-
+    extern Music bgMusic;
+    float startVolume = ((float)g_settings.musicVolume / 100.0f) * 0.3f;
+    SetMusicVolume(bgMusic, startVolume);
     while (!WindowShouldClose()) {
         UpdateMusicStream(bgMusic);
         switch (currentScreen) {
