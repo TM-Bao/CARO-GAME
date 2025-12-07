@@ -16,7 +16,8 @@ void InitGame();
 void UpdateGame(GameScreen& currentScreen);    
 GameStatus TestBoard();
 bool CheckAndPlace(int cellX, int cellY); 
-
+void Movement_X(int& cursorX, int& cursorY);
+void Movement_O(int& cursorX, int& cursorY);
 
 void saveGame(const std::string& filename);
 void loadGame(const std::string& filename);
