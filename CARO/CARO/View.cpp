@@ -112,6 +112,35 @@ void DrawGameView() {
     DrawTextEx(customFont, p1Text,
         Vector2{ (float)(leftPanelX + (panelWidth - p1TextSize.x) / 2), (float)(panelY + 60) },
         40.0f, 1.0f, p1Color);
+    // ==== KEYCAP CHO PLAYER 1 (W / A S D) ====
+    float keySize = 50;
+    float gap = 30;                // khoảng cách ngang A–S–D
+    float verticalGap = 5;        // khoảng cách dọc W–S (mới thêm)
+
+    float cx = leftPanelX + panelWidth / 2;    // tâm panel
+    float topY = panelY + 150;                 // hàng W
+    float bottomY = topY + keySize + verticalGap;  // hàng ASD
+
+    // ===== W =====
+    DrawRectangle(cx - keySize / 2, topY, keySize, keySize, WHITE);
+    DrawRectangleLines(cx - keySize / 2, topY, keySize, keySize, BLACK);
+    DrawText("W", cx - 10, topY + 10, 32, BLACK);
+
+    // ===== A =====
+    DrawRectangle(cx - keySize - gap, bottomY, keySize, keySize, WHITE);
+    DrawRectangleLines(cx - keySize - gap, bottomY, keySize, keySize, BLACK);
+    DrawText("A", cx - keySize - gap + keySize / 2 - 10, bottomY + 10, 32, BLACK);
+
+    // ===== S =====
+    DrawRectangle(cx - keySize / 2, bottomY, keySize, keySize, WHITE);
+    DrawRectangleLines(cx - keySize / 2, bottomY, keySize, keySize, BLACK);
+    DrawText("S", cx - 10, bottomY + 10, 32, BLACK);
+
+    // ===== D =====
+    DrawRectangle(cx + gap, bottomY, keySize, keySize, WHITE);
+    DrawRectangleLines(cx + gap, bottomY, keySize, keySize, BLACK);
+    DrawText("D", cx + gap + keySize / 2 - 10, bottomY + 10, 32, BLACK);
+
 //Player 2
     DrawRectangle(rightPanelX, panelY, panelWidth, panelHeight, HSR_FRAME);
     DrawRectangleLinesEx(Rectangle{ (float)rightPanelX, (float)panelY, (float)panelWidth, (float)panelHeight }, 5.0f, p2Highlight);
@@ -121,6 +150,39 @@ void DrawGameView() {
     DrawTextEx(customFont, p2Text,
         Vector2{ (float)(rightPanelX + (panelWidth - p2TextSize.x) / 2), (float)(panelY + 60) },
         40.0f, 1.0f, p2Color);
+    // ==== KEYCAP CHO PLAYER 2 (ARROWS) ====
+    int keySize2 = 50;
+    int keySpacing2 = 30;          // khoảng cách ngang (LEFT–DOWN–RIGHT)
+    int verticalSpacing2 = 5;     // khoảng cách dọc (UP–DOWN)
+
+    int cx2 = rightPanelX + panelWidth / 2;   // tâm panel
+    int upY = panelY + 150;                  // vị trí nút UP
+    int downY = upY + keySize2 + verticalSpacing2;   // vị trí hàng LEFT–DOWN–RIGHT
+
+    // ===== UP ( ^ ) =====
+    Rectangle keyUp = { cx2 - keySize2 / 2, upY, keySize2, keySize2 };
+    DrawRectangleRec(keyUp, WHITE);
+    DrawRectangleLinesEx(keyUp, 2, BLACK);
+    DrawText("^", keyUp.x + keySize2 / 2 - 6, keyUp.y + 6, 28, BLACK);
+
+    // ===== LEFT ( < ) =====
+    Rectangle keyLeft = { cx2 - keySize2 - keySpacing2, downY, keySize2, keySize2 };
+    DrawRectangleRec(keyLeft, WHITE);
+    DrawRectangleLinesEx(keyLeft, 2, BLACK);
+    DrawText("<", keyLeft.x + keySize2 / 2 - 7, keyLeft.y + 6, 28, BLACK);
+
+    // ===== DOWN ( v ) =====
+    Rectangle keyDown = { cx2 - keySize2 / 2, downY, keySize2, keySize2 };
+    DrawRectangleRec(keyDown, WHITE);
+    DrawRectangleLinesEx(keyDown, 2, BLACK);
+    DrawText("v", keyDown.x + keySize2 / 2 - 7, keyDown.y + 8, 28, BLACK);
+
+    // ===== RIGHT ( > ) =====
+    Rectangle keyRight = { cx2 + keySpacing2, downY, keySize2, keySize2 };
+    DrawRectangleRec(keyRight, WHITE);
+    DrawRectangleLinesEx(keyRight, 2, BLACK);
+    DrawText(">", keyRight.x + keySize2 / 2 - 7, keyRight.y + 6, 28, BLACK);
+
     float subTextSize = 32.0f;
 
     const char* saveText = u8"PRESS [L] TO SAVE";

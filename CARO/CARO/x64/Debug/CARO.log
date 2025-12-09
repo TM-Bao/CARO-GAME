@@ -1,4 +1,10 @@
-﻿  Game.cpp
-C:\nhóm\caro3.0\CARO-GAME\CARO\CARO\Game.cpp(106,19): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\nhóm\caro3.0\CARO-GAME\CARO\CARO\Game.cpp(107,19): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+﻿  View.cpp
+C:\nhóm\caro3.0\CARO-GAME\CARO\CARO\View.cpp(89,29): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\nhóm\caro3.0\CARO-GAME\CARO\CARO\View.cpp(90,29): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\nhóm\caro3.0\CARO-GAME\CARO\CARO\View.cpp(93,47): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\nhóm\caro3.0\CARO-GAME\CARO\CARO\View.cpp(93,40): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\nhóm\caro3.0\CARO-GAME\CARO\CARO\View.cpp(123,16): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\nhóm\caro3.0\CARO-GAME\CARO\CARO\View.cpp(124,16): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+C:\nhóm\caro3.0\CARO-GAME\CARO\CARO\View.cpp(127,32): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\nhóm\caro3.0\CARO-GAME\CARO\CARO\View.cpp(127,26): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   CARO.vcxproj -> C:\nhóm\caro3.0\CARO-GAME\CARO\x64\Debug\CARO.exe

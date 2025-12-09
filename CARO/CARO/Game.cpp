@@ -29,7 +29,8 @@ void InitGame() {
 //XỬ LÍ DI CHUYỂN ĐỘC LẬP: WADS_X , ↑ ↓ ← →_Y
 void Movement_X(int& cursorX, int& cursorY) {
     static float time = 0;
-    time -= GetFrameTime();
+    time -= GetFrameTime(); //time sẽ giảm từ từ theo tgian của frame cho đến khi về = 0 hoặc xấp xỉ 0
+                            //60FPS = 0.016s cho mỗi frame, vd time = 0.12 -> frame2 time = 0.104 -> frame3 time = 0.088...
 
     if (time <= 0) {
         if (IsKeyDown(KEY_W) && cursorY > 0) {
