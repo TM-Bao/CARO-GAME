@@ -17,9 +17,7 @@ std::map<std::string, Texture2D> game_textures;
 
 void InitMenu() {
     g_menuChoice = 0;
-    game_textures["background"] = LoadTexture("assects/images/intro_bg.png");
-    game_textures["cerydra"] = LoadTexture("assects/images/cerydra.png");
-    game_textures["silverwolf"] = LoadTexture("assects/images/silverwolf_intro.png");
+    game_textures["background"] = LoadTexture("assects/images/background.png");
     game_textures["X_icon"] = LoadTexture("assects/images/X_intro.png");
     game_textures["O_icon"] = LoadTexture("assects/images/O_intro.png");
     game_textures["choosen_arrow"] = LoadTexture("assects/images/arrow_menu.png");
@@ -95,8 +93,6 @@ void DrawMenuArrow(Vector2 LeftArrow, Vector2 RightArrow) {
 }
 
 void DrawImage() {
-    Vector2 cerydra_position = { 100, 600 };
-    Vector2 silverwolf_position = { SCREEN_WIDTH - 1050, 600 };
     Vector2 O_position = { 120, 0 };
     Vector2 X_position = { SCREEN_WIDTH - 380, 15 };
 

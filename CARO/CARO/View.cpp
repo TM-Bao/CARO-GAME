@@ -1,5 +1,6 @@
 ﻿#include "View.h"
-#include "Game.h" 
+#include "Game.h"
+#include "settings.h"
 #pragma execution_character_set("utf-8")
 
 static Texture2D texX;
@@ -112,6 +113,19 @@ void DrawGameView() {
     DrawTextEx(customFont, p1Text,
         Vector2{ (float)(leftPanelX + (panelWidth - p1TextSize.x) / 2), (float)(panelY + 60) },
         40.0f, 1.0f, p1Color);
+    if (g_settings.inputMode == INPUT_KEYBOARD) {
+        Color guideColor = g_turn ? GOLD : GRAY;
+
+        DrawTextEx(customFont, "MOVE: [W] [A] [S] [D]",
+            Vector2{ (float)(leftPanelX + 40), (float)(panelY + 120) }, 25.0f, 1.0f, guideColor);
+
+        DrawTextEx(customFont, "PLACE: [SPACE] / [ENTER]",
+            Vector2{ (float)(leftPanelX + 40), (float)(panelY + 160) }, 25.0f, 1.0f, guideColor);
+    }
+    else {
+        DrawTextEx(customFont, "MODE: MOUSE CLICK",
+            Vector2{ (float)(leftPanelX + 40), (float)(panelY + 140) }, 30.0f, 1.0f, LIGHTGRAY);
+    }
 //Player 2
     DrawRectangle(rightPanelX, panelY, panelWidth, panelHeight, HSR_FRAME);
     DrawRectangleLinesEx(Rectangle{ (float)rightPanelX, (float)panelY, (float)panelWidth, (float)panelHeight }, 5.0f, p2Highlight);
@@ -122,6 +136,20 @@ void DrawGameView() {
         Vector2{ (float)(rightPanelX + (panelWidth - p2TextSize.x) / 2), (float)(panelY + 60) },
         40.0f, 1.0f, p2Color);
     float subTextSize = 32.0f;
+    if (g_settings.inputMode == INPUT_KEYBOARD) {
+        // Chỉ vẽ màu sáng nếu đúng là lượt của P2
+        Color guideColor = !g_turn ? GOLD : GRAY;
+
+        DrawTextEx(customFont, "MOVE: [ARROW KEYS]",
+            Vector2{ (float)(rightPanelX + 40), (float)(panelY + 120) }, 25.0f, 1.0f, guideColor);
+
+        DrawTextEx(customFont, "PLACE: [SPACE] / [ENTER]",
+            Vector2{ (float)(rightPanelX + 40), (float)(panelY + 160) }, 25.0f, 1.0f, guideColor);
+    }
+    else {
+        DrawTextEx(customFont, "MODE: MOUSE CLICK",
+            Vector2{ (float)(rightPanelX + 40), (float)(panelY + 140) }, 30.0f, 1.0f, LIGHTGRAY);
+    }
 
     const char* saveText = u8"PRESS [L] TO SAVE";
     Vector2 saveTextSize = MeasureTextEx(customFont, saveText, subTextSize, 1.0f);
@@ -155,6 +183,13 @@ void DrawGameView() {
         textPos = Vector2{ (float)(GetScreenWidth() - textSize.x) / 2, (float)(GetScreenHeight() / 2 + 40) };
         DrawTextEx(customFont, restartText, Vector2{ textPos.x + 3, textPos.y + 3 }, subSize, 1.0f, BLACK);
         DrawTextEx(customFont, restartText, textPos, subSize, 1.0f, WHITE);
+
+        Rectangle btnSetting = { (float)SCREEN_WIDTH - 170, 20, 150, 50 }; // Vị trí nút
+        bool isHover = CheckCollisionPointRec(GetMousePosition(), btnSetting);
+        Color btnColor = isHover ? SKYBLUE : RED;
+        DrawRectangleRec(btnSetting, btnColor);             // Vẽ nền nút
+        DrawRectangleLinesEx(btnSetting, 3, DARKBLUE);      // Vẽ viền nút
+        DrawText("SETTINGS", btnSetting.x + 25, btnSetting.y + 15, 20, DARKBLUE);
     }
     for (int i = 0; i < 5; i++) {
         DrawRectangleLines(
