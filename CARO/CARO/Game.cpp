@@ -27,6 +27,13 @@ void InitGame() {
 }
 
 void UpdateGame(GameScreen& currentScreen) {
+    Rectangle btnSetting = { (float)SCREEN_WIDTH - 170, 20, 150, 50 };
+    if (CheckCollisionPointRec(GetMousePosition(), btnSetting)) {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            currentScreen = SETTING;
+            return;
+        }
+    }
     if (g_status != PLAYING) {
         if (IsKeyPressed(KEY_Y)) InitGame();
         return;
