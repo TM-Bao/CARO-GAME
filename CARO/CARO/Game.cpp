@@ -1,7 +1,7 @@
 ﻿#include "Game.h"
 #include "raylib.h"
-#include <fstream> //
-#include <iostream> //
+#include <fstream> 
+#include <iostream> 
 #include "settings.h"
 #include "Audio.h"
 
@@ -10,6 +10,10 @@ bool g_turn;
 GameStatus g_status;
 int g_cursorX;
 int g_cursorY;
+int winStartX = -1;
+int winStartY = -1;
+int winEndX = -1;
+int winEndY = -1;
 
 
 void InitGame() {
@@ -108,10 +112,43 @@ GameStatus TestBoard() {
         for (int j = 0; j < BOARD_SIZE; j++) {
             Player c = (Player)g_board[i][j];
             if (c == EMPTY) continue;
-            if (j + 4 < BOARD_SIZE && c == g_board[i][j + 1] && c == g_board[i][j + 2] && c == g_board[i][j + 3] && c == g_board[i][j + 4]) return (c == X) ? X_WIN : O_WIN;
-            if (i + 4 < BOARD_SIZE && c == g_board[i + 1][j] && c == g_board[i + 2][j] && c == g_board[i + 3][j] && c == g_board[i + 4][j]) return (c == X) ? X_WIN : O_WIN;
-            if (i + 4 < BOARD_SIZE && j + 4 < BOARD_SIZE && c == g_board[i + 1][j + 1] && c == g_board[i + 2][j + 2] && c == g_board[i + 3][j + 3] && c == g_board[i + 4][j + 4]) return (c == X) ? X_WIN : O_WIN;
-            if (i + 4 < BOARD_SIZE && j >= 4 && c == g_board[i + 1][j - 1] && c == g_board[i + 2][j - 2] && c == g_board[i + 3][j - 3] && c == g_board[i + 4][j - 4]) return (c == X) ? X_WIN : O_WIN;
+            if (j + 4 < BOARD_SIZE &&
+                c == g_board[i][j + 1] &&
+                c == g_board[i][j + 2] &&
+                c == g_board[i][j + 3] &&
+                c == g_board[i][j + 4]) {
+                winStartX = j; winStartY = i;
+                winEndX = j + 4; winEndY = i;
+                return (c == X) ? X_WIN : O_WIN;
+            }
+            if (i + 4 < BOARD_SIZE &&
+                c == g_board[i + 1][j] &&
+                c == g_board[i + 2][j] &&
+                c == g_board[i + 3][j] &&
+                c == g_board[i + 4][j]) {
+                winStartX = j; winStartY = i;
+                winEndX = j; winEndY = i + 4;
+                return (c == X) ? X_WIN : O_WIN;
+            }
+
+            if (i + 4 < BOARD_SIZE && j + 4 < BOARD_SIZE &&
+                c == g_board[i + 1][j + 1] &&
+                c == g_board[i + 2][j + 2] &&
+                c == g_board[i + 3][j + 3] &&
+                c == g_board[i + 4][j + 4]) {
+                winStartX = j; winStartY = i;
+                winEndX = j + 4; winEndY = i + 4;
+                return (c == X) ? X_WIN : O_WIN;
+            }
+            if (i + 4 < BOARD_SIZE && j >= 4 &&
+                c == g_board[i + 1][j - 1] &&
+                c == g_board[i + 2][j - 2] &&
+                c == g_board[i + 3][j - 3] &&
+                c == g_board[i + 4][j - 4]) {
+                winStartX = j; winStartY = i;
+                winEndX = j - 4; winEndY = i + 4;
+                return (c == X) ? X_WIN : O_WIN;
+            }
         }
     }
     return isFull() ? DRAW : PLAYING;
