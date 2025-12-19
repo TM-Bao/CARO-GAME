@@ -10,7 +10,7 @@ const int SCREEN_HEIGHT = 950;
 //Logic Game
 #define BOARD_SIZE 12 
 enum Player { EMPTY = 0, X = -1, O = 1 };
-enum GameStatus { PLAYING, X_WIN, O_WIN, DRAW };
+enum GameStatus { PLAYING, X_WIN, O_WIN, DRAW, PAUSE };
 enum InputMode { INPUT_KEYBOARD, INPUT_MOUSE };
 
 //Set up bàn cờ
@@ -28,7 +28,7 @@ const int BOARD_OFFSET_Y = (SCREEN_HEIGHT - BOARD_WIDTH) / 2;
 #define HSR_SQUARE_DARK CLITERAL(Color){ 60, 70, 90, 255 }
 #define HSR_SQUARE_LIGHT CLITERAL(Color){ 210, 220, 230, 255 }
 
-enum GameScreen { MENU, GAMEPLAY, ABOUT, SETTING };
+enum GameScreen { MENU, LOAD, GAMEPLAY, ABOUT, SETTING };
 
 #endif 
 

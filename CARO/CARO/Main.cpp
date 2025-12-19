@@ -29,9 +29,12 @@ int main(void) {
             break;
         case GAMEPLAY:
             UpdateGame(currentScreen);
-            if (IsKeyPressed(KEY_ESCAPE)) {
+            if (IsKeyPressed(KEY_ESCAPE) && g_status != PAUSE && g_status != PLAYING ) {
                 currentScreen = MENU;
             }
+            break;
+        case LOAD:
+            UpdateLoad(currentScreen);
             break;
         case ABOUT:
             UpdateAbout(currentScreen);
@@ -52,6 +55,9 @@ int main(void) {
             break;
         case GAMEPLAY:
             DrawGameView();
+            break;
+        case LOAD:
+            DrawLoad();
             break;
         case ABOUT:
             DrawAbout();

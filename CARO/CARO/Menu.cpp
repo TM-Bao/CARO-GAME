@@ -2,12 +2,16 @@
 #include "Game.h" 
 #include "raylib.h"
 int g_menuChoice = 0; //
+int g_loadChoice = 0;
+
 const char* MENU_ITEMS[] = { "NEW GAME", "LOAD GAME", "ABOUT", "SETTING", "EXIT" };
+const char* LOAD_SLOTS[] = { "SLOT 1", "SLOT 2", "SLOT 3" };
 const char* MEMBERS[][3] = { 
     {"TUAN HUNG", "SOK MINH", "TRUONG GIANG"},
     {"GIA BAO", "QUOC ANH", "DUC THINH"} 
 };
 const char* TOOLS[] = { "C++", "RAYLIB" };
+const int LOAD_SLOT = 3;
 const int MENU_COUNT = 5;
 const int MEMBERS_ROW = 2;
 const int MEMBERS_COL = 3;
@@ -40,8 +44,7 @@ void UpdateMenu(GameScreen& currentScreen) {
             currentScreen = GAMEPLAY;
             break;
         case 1: // LOAD GAME
-            loadGame("save.txt"); 
-            currentScreen = GAMEPLAY;
+            currentScreen = LOAD;
             break;
         case 2: // ABOUT
             currentScreen = ABOUT;
@@ -168,6 +171,69 @@ void DrawAbout() {
     int footerSize = 30;
     DrawText(footer, centerX - MeasureText(footer, footerSize) / 2, panelY + panelHeight - 50, footerSize, GRAY);
 }
+void UpdateLoad(GameScreen& currentScreen) {
+    if (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_UP)) {
+        g_loadChoice = (g_loadChoice == 0) ? LOAD_SLOT - 1 : g_loadChoice - 1;
+    }
+    if (IsKeyPressed(KEY_S) || IsKeyPressed(KEY_DOWN)) {
+        g_loadChoice = (g_loadChoice == LOAD_SLOT - 1) ? 0 : g_loadChoice + 1;
+    }
+    if (IsKeyPressed(KEY_ENTER)) { //
+        switch (g_loadChoice) {
+        case 0:
+            loadGame("save1.txt");
+            currentScreen = GAMEPLAY;
+            break;
+        case 1:
+            loadGame("save2.txt");
+            currentScreen = GAMEPLAY;
+            break;
+        case 2:
+            loadGame("save3.txt");
+            currentScreen = GAMEPLAY;
+            break;
+        }
+    }
+    if (IsKeyPressed(KEY_ESCAPE)) {
+        currentScreen = MENU;
+    }
+
+}
+void DrawLoad() {
+    ClearBackground(WHITE);
+    Texture2D bg = game_textures["about_bg"];
+    Rectangle bgSource = { 0.0, 0.0, (float)bg.width, (float)bg.height };
+    Rectangle bgDest = { 0.0, 0.0, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT };
+    DrawTexturePro(bg, bgSource, bgDest, { 0, 0 }, 0.0, WHITE);
+    float panelWidth = 1200;
+    float panelHeight = 800;
+    float panelX = (SCREEN_WIDTH - panelWidth) / 2;
+    float panelY = (SCREEN_HEIGHT - panelHeight) / 2;
+    float centerX = SCREEN_WIDTH / 2;
+    DrawRectangle(panelX, panelY, panelWidth, panelHeight, Fade(CLITERAL(Color) { 10, 20, 40, 255 }, 0.9f));
+    DrawRectangleLinesEx(Rectangle{ panelX, panelY, panelWidth, panelHeight }, 5.0f, SKYBLUE);
+    DrawRectangleLinesEx(Rectangle{ panelX + 10, panelY + 10, panelWidth - 20, panelHeight - 20 }, 2.0f, DARKBLUE);
+    const char* mainTitle = "LOAD MENU";
+    int mainTitleSize = 100;
+    DrawText(mainTitle, centerX - MeasureText(mainTitle, mainTitleSize) / 2 + 6, panelY + 60, mainTitleSize, BLACK);
+    DrawText(mainTitle, centerX - MeasureText(mainTitle, mainTitleSize) / 2, panelY + 50, mainTitleSize, YELLOW);
+    int currentY = panelY + 180;
+    int menu_start_y = 350;
+    int menu_spacing = 100;
+    for (int i = 0; i < LOAD_SLOT; i++) {
+        Color TColor = (i == g_loadChoice) ? YELLOW : LIGHTGRAY;
+        Color BColor = (i == g_loadChoice) ? DARKPURPLE : BLACK;
+        int textWidth = MeasureText(LOAD_SLOTS[i], 100);
+        int text_x_position = (SCREEN_WIDTH - textWidth) / 2;
+        int text_y_position = menu_start_y + i * menu_spacing;
+        int text_xend_position = (text_x_position + textWidth);
+        DrawTextAndBorder(LOAD_SLOTS[i], text_x_position, text_y_position, 100, 10, BColor, TColor);
+    }
+    const char* footer = "Press [ESC] to Return Menu";
+    int footerSize = 30;
+    DrawText(footer, centerX - MeasureText(footer, footerSize) / 2, panelY + panelHeight - 50, footerSize, GRAY);
+}
+
 void UnloadAllTextures() {
     for (auto pair : game_textures) {
         UnloadTexture(pair.second);

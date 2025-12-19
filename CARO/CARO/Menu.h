@@ -23,6 +23,8 @@ void DrawTextAndBorder(const char* text, int posX, int posY, int Size, int Outli
 
 void DrawAbout();
 void UpdateAbout(GameScreen& currentScreen);
+void DrawLoad();
+void UpdateLoad(GameScreen& currentScreen);
 void DrawSetting();
 void UpdateSetting(GameScreen& currentScreen);
 

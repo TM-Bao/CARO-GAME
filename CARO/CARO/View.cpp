@@ -1,6 +1,7 @@
 ﻿#include "View.h"
 #include "Game.h"
 #include "settings.h"
+#include<iostream>
 #pragma execution_character_set("utf-8")
 
 static Texture2D texX;
@@ -151,7 +152,7 @@ void DrawGameView() {
             Vector2{ (float)(rightPanelX + 40), (float)(panelY + 140) }, 30.0f, 1.0f, LIGHTGRAY);
     }
 
-    const char* saveText = u8"PRESS [L] TO SAVE";
+    const char* saveText = u8"";
     Vector2 saveTextSize = MeasureTextEx(customFont, saveText, subTextSize, 1.0f);
     float saveX = leftPanelX + (panelWidth - saveTextSize.x) / 2;
     DrawTextEx(customFont, saveText,
@@ -165,7 +166,7 @@ void DrawGameView() {
         subTextSize, 1.0f, BLACK);
 
     // 6. Vẽ thông báo thắng
-    if (g_status != PLAYING) {
+    if (g_status != PLAYING && g_status != PAUSE) {
         DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), CLITERAL(Color){ 0, 0, 0, 180 });
 
         const char* winnerText = "";
@@ -191,6 +192,23 @@ void DrawGameView() {
         DrawRectangleLinesEx(btnSetting, 3, DARKBLUE);      // Vẽ viền nút
         DrawText("SETTINGS", btnSetting.x + 25, btnSetting.y + 15, 20, DARKBLUE);
     }
+    if (g_status != PLAYING && g_status == PAUSE) {
+        DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), CLITERAL(Color){ 0, 0, 0, 180 });
+        const char* text = "DO YOU WANT TO SAVE BEFORE EXIT?";
+        float titleSize = 80.0f;
+        Vector2 textSize = MeasureTextEx(customFont, text, titleSize, 1.0f);
+        Vector2 textPos = { (float)(GetScreenWidth() - textSize.x) / 2, (float)(GetScreenHeight() / 2 - 80) };
+        DrawTextEx(customFont, text, Vector2{ textPos.x + 5, textPos.y + 5 }, titleSize, 1.0f, BLACK);
+        DrawTextEx(customFont, text, textPos, titleSize, 1.0f, GOLD);
+        const char* quitText = "PRESS NUMBER [1], [2] OR [3] TO SAVE GAME TO THE FOLOWING SLOTS OR [N] TO EXIT OR [C] TO CONTINUE";
+        float subSize = 30.0f;
+        textSize = MeasureTextEx(customFont, quitText, subSize, 1.0f);
+        textPos = Vector2{ (float)(GetScreenWidth() - textSize.x) / 2, (float)(GetScreenHeight() / 2 + 40) };
+        DrawTextEx(customFont, quitText, Vector2{ textPos.x + 3, textPos.y + 3 }, subSize, 1.0f, BLACK);
+        DrawTextEx(customFont, quitText, textPos, subSize, 1.0f, WHITE);
+
+    }
+
     for (int i = 0; i < 5; i++) {
         DrawRectangleLines(
             BOARD_OFFSET_X + g_cursorX * CELL_SIZE + i,
