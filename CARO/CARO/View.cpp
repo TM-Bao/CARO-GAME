@@ -137,7 +137,6 @@ void DrawGameView() {
         40.0f, 1.0f, p2Color);
     float subTextSize = 32.0f;
     if (g_settings.inputMode == INPUT_KEYBOARD) {
-        // Chỉ vẽ màu sáng nếu đúng là lượt của P2
         Color guideColor = !g_turn ? GOLD : GRAY;
 
         DrawTextEx(customFont, "MOVE: [ARROW KEYS]",
@@ -164,31 +163,67 @@ void DrawGameView() {
         Vector2{ menuX, (float)(panelY + panelHeight + 20) },
         subTextSize, 1.0f, BLACK);
 
-    // 6. Vẽ thông báo thắng
     if (g_status != PLAYING) {
-        DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), CLITERAL(Color){ 0, 0, 0, 180 });
+        if (g_status == X_WIN || g_status == O_WIN) {
+            Vector2 startPos = {
+                (float)(BOARD_OFFSET_X + winStartX * CELL_SIZE + CELL_SIZE / 2),
+                (float)(BOARD_OFFSET_Y + winStartY * CELL_SIZE + CELL_SIZE / 2)
+            };
+            Vector2 endPos = {
+                (float)(BOARD_OFFSET_X + winEndX * CELL_SIZE + CELL_SIZE / 2),
+                (float)(BOARD_OFFSET_Y + winEndY * CELL_SIZE + CELL_SIZE / 2)
+            };
+
+            DrawLineEx(startPos, endPos, 12.0f, WHITE);
+            DrawLineEx(startPos, endPos, 6.0f, GOLD);
+            DrawCircleV(startPos, 6.0f, WHITE);
+            DrawCircleV(endPos, 6.0f, WHITE);
+            DrawCircleV(startPos, 3.0f, GOLD);
+            DrawCircleV(endPos, 3.0f, GOLD);
+        }
+
 
         const char* winnerText = "";
-        if (g_status == X_WIN) winnerText = "PLAYER 1 WINS!";
-        else if (g_status == O_WIN) winnerText = "PLAYER 2 WINS!";
-        else if (g_status == DRAW) winnerText = "IT'S A DRAW!";
-        float titleSize = 80.0f;
-        Vector2 textSize = MeasureTextEx(customFont, winnerText, titleSize, 1.0f);
-        Vector2 textPos = { (float)(GetScreenWidth() - textSize.x) / 2, (float)(GetScreenHeight() / 2 - 80) };
-        DrawTextEx(customFont, winnerText, Vector2{ textPos.x + 5, textPos.y + 5 }, titleSize, 1.0f, BLACK);
-        DrawTextEx(customFont, winnerText, textPos, titleSize, 1.0f, GOLD);
-        const char* restartText = "PRESS [Y] TO PLAY AGAIN OR [ESC] TO RETURN TO MENU";
-        float subSize = 30.0f;
-        textSize = MeasureTextEx(customFont, restartText, subSize, 1.0f);
-        textPos = Vector2{ (float)(GetScreenWidth() - textSize.x) / 2, (float)(GetScreenHeight() / 2 + 40) };
-        DrawTextEx(customFont, restartText, Vector2{ textPos.x + 3, textPos.y + 3 }, subSize, 1.0f, BLACK);
-        DrawTextEx(customFont, restartText, textPos, subSize, 1.0f, WHITE);
+        Color winnerColor = WHITE;
 
-        Rectangle btnSetting = { (float)SCREEN_WIDTH - 170, 20, 150, 50 }; // Vị trí nút
+        if (g_status == X_WIN) {
+            winnerText = "PLAYER 1 WINS!";
+            winnerColor = RED;
+        }
+        else if (g_status == O_WIN) {
+            winnerText = "PLAYER 2 WINS!";
+            winnerColor = SKYBLUE;
+        }
+        else {
+            winnerText = "DRAW GAME!";
+            winnerColor = LIGHTGRAY;
+        }
+        float titleSize = 80.0f;
+        float subSize = 30.0f;
+        Vector2 winnerSize = MeasureTextEx(customFont, winnerText, titleSize, 1.0f);
+        Vector2 textPos = { (GetScreenWidth() - winnerSize.x) / 2, 30.0f };
+        float stroke = 3.0f;
+        DrawTextEx(customFont, winnerText, Vector2{ textPos.x - stroke, textPos.y }, titleSize, 1.0f, BLACK);
+        DrawTextEx(customFont, winnerText, Vector2{ textPos.x + stroke, textPos.y }, titleSize, 1.0f, BLACK);
+        DrawTextEx(customFont, winnerText, Vector2{ textPos.x, textPos.y - stroke }, titleSize, 1.0f, BLACK);
+        DrawTextEx(customFont, winnerText, Vector2{ textPos.x, textPos.y + stroke }, titleSize, 1.0f, BLACK);
+        DrawTextEx(customFont, winnerText, textPos, titleSize, 1.0f, winnerColor);
+        const char* guideText = "PRESS [Y] TO RESTART   |   [ESC] TO MENU";
+        Vector2 guideSize = MeasureTextEx(customFont, guideText, subSize, 1.0f);
+        Vector2 guidePos = { (GetScreenWidth() - guideSize.x) / 2, GetScreenHeight() - 60.0f };
+        stroke = 2.0f;
+        DrawTextEx(customFont, guideText, Vector2{ guidePos.x - stroke, guidePos.y }, subSize, 1.0f, BLACK);
+        DrawTextEx(customFont, guideText, Vector2{ guidePos.x + stroke, guidePos.y }, subSize, 1.0f, BLACK);
+        DrawTextEx(customFont, guideText, Vector2{ guidePos.x, guidePos.y - stroke }, subSize, 1.0f, BLACK);
+        DrawTextEx(customFont, guideText, Vector2{ guidePos.x, guidePos.y + stroke }, subSize, 1.0f, BLACK);
+
+
+        DrawTextEx(customFont, guideText, guidePos, subSize, 1.0f, WHITE);
+        Rectangle btnSetting = { (float)SCREEN_WIDTH - 170, 20, 150, 50 };
         bool isHover = CheckCollisionPointRec(GetMousePosition(), btnSetting);
         Color btnColor = isHover ? SKYBLUE : RED;
-        DrawRectangleRec(btnSetting, btnColor);             // Vẽ nền nút
-        DrawRectangleLinesEx(btnSetting, 3, DARKBLUE);      // Vẽ viền nút
+        DrawRectangleRec(btnSetting, btnColor);
+        DrawRectangleLinesEx(btnSetting, 3, DARKBLUE);
         DrawText("SETTINGS", btnSetting.x + 25, btnSetting.y + 15, 20, DARKBLUE);
     }
     for (int i = 0; i < 5; i++) {

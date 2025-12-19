@@ -5,7 +5,6 @@
 #include "View.h"
 #include "settings.h"
 #include "Audio.h"
-
 int main(void) {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "CARO GAME"); 
     SetTargetFPS(60);

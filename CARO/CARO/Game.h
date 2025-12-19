@@ -10,6 +10,10 @@ extern bool g_turn;
 extern GameStatus g_status;
 extern int g_cursorX;
 extern int g_cursorY;
+extern int winStartX;
+extern int winStartY;
+extern int winEndX;
+extern int winEndY;
 
 
 void InitGame();      
