@@ -1,14 +1,18 @@
-﻿#include "Menu.h"
+#include "Menu.h"
 #include "Game.h" 
 #include "raylib.h"
 #include <iostream>
 int g_menuChoice = 0; //
+int g_loadChoice = 0;
+
 const char* MENU_ITEMS[] = { "NEW GAME", "LOAD GAME", "ABOUT", "SETTING", "EXIT" };
+const char* LOAD_SLOTS[] = { "SLOT 1", "SLOT 2", "SLOT 3" };
 const char* MEMBERS[][3] = { 
     {"TUAN HUNG", "SOK MINH", "TRUONG GIANG"},
     {"GIA BAO", "QUOC ANH", "DUC THINH"} 
 };
 const char* TOOLS[] = { "C++", "RAYLIB" };
+const int LOAD_SLOT = 3;
 const int MENU_COUNT = 5;
 const int MEMBERS_ROW = 2;
 const int MEMBERS_COL = 3;
@@ -41,8 +45,7 @@ void UpdateMenu(GameScreen& currentScreen) {
             currentScreen = GAMEPLAY;
             break;
         case 1: // LOAD GAME
-            loadGame("save.txt"); 
-            currentScreen = GAMEPLAY;
+            currentScreen = LOAD;
             break;
         case 2: // ABOUT
             currentScreen = ABOUT;
@@ -169,10 +172,6 @@ void DrawAbout() {
     int footerSize = 30;
     DrawText(footer, centerX - MeasureText(footer, footerSize) / 2, panelY + panelHeight - 50, footerSize, GRAY);
 }
-<<<<<<< Updated upstream
-=======
-void UpdateLoad(GameScreen& currentScreen) {
-    // ... (Giữ nguyên phần điều khiển lên xuống) ...
     if (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_UP)) {
         g_loadChoice = (g_loadChoice == 0) ? LOAD_SLOT - 1 : g_loadChoice - 1;
     }
@@ -240,8 +239,6 @@ void DrawLoad() {
     int footerSize = 30;
     DrawText(footer, centerX - MeasureText(footer, footerSize) / 2, panelY + panelHeight - 50, footerSize, GRAY);
 }
-
->>>>>>> Stashed changes
 void UnloadAllTextures() {
     for (auto pair : game_textures) {
         UnloadTexture(pair.second);
