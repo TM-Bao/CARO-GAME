@@ -6,7 +6,7 @@
 #include "View.h"
 #include "settings.h"
 #include "Audio.h"
-
+GameScreen g_previousScreen = MENU;
 int main(void) {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "CARO GAME");
     SetTargetFPS(60);

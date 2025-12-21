@@ -54,7 +54,8 @@ void UpdateMenu(GameScreen& currentScreen) {
         case 2: // ABOUT
             currentScreen = ABOUT;
             break;
-        case 3: // SETTING
+        case 3:
+            g_previousScreen = MENU; // SETTING
             currentScreen = SETTING;
             break;
         case 4: // EXIT
