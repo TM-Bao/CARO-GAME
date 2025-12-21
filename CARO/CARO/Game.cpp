@@ -28,7 +28,7 @@ void InitGame() {
     g_cursorY = BOARD_SIZE / 2;
 }
 
-//XỬ LÍ DI CHUYỂN ĐỘC LẬP: WADS_X , ↑ ↓ ← →_Y
+//XỬ LÍ DI CHUYỂN ĐỘC LẬP : WADS_X, ↑ ↓ ← →_Y
 void Movement_X(int& cursorX, int& cursorY) {
     static float time = 0;
     time -= GetFrameTime();
@@ -75,7 +75,6 @@ void Movement_Y(int& cursorX, int& cursorY) {
         }
     }
 }
-
 void UpdateGame(GameScreen& currentScreen) {
     Rectangle btnSetting = { (float)SCREEN_WIDTH - 170, 20, 150, 50 };
     if (CheckCollisionPointRec(GetMousePosition(), btnSetting)) {
@@ -104,15 +103,15 @@ void UpdateGame(GameScreen& currentScreen) {
         // Save slots
         if (IsKeyPressed(KEY_ONE) || IsKeyPressed(KEY_KP_1)) {
             saveGame("save1.txt");
-            g_status = PLAYING; 
+            currentScreen = MENU; 
         }
         if (IsKeyPressed(KEY_TWO) || IsKeyPressed(KEY_KP_2)) {
             saveGame("save2.txt");
-            g_status = PLAYING;
+            currentScreen = MENU;
         }
         if (IsKeyPressed(KEY_THREE) || IsKeyPressed(KEY_KP_3)) {
             saveGame("save3.txt");
-            g_status = PLAYING;
+            currentScreen = MENU;
         }
         return; 
     }
@@ -120,20 +119,25 @@ void UpdateGame(GameScreen& currentScreen) {
         if (IsKeyPressed(KEY_Y)) InitGame();
         return;
     }
-
-    // 1. INPUT KEYBOARD
+    //INPUT KEYBOARD
     if (g_settings.inputMode == INPUT_KEYBOARD) {
         if (g_turn) Movement_X(g_cursorX, g_cursorY); //X
         else Movement_Y(g_cursorX, g_cursorY);  //O
         if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE)) {
             if (CheckAndPlace(g_cursorX, g_cursorY)) {
-                if (g_settings.soundEnable) PlaySound(fxMove);
+                if (g_settings.soundEnable) {
+                    PlaySound(fxMove);
+                }
                 g_status = TestBoard();
+                if (g_settings.soundEnable) PlaySound(fxMove);
                 if (g_status == PLAYING) g_turn = !g_turn;
                 else if (g_settings.soundEnable && (g_status == X_WIN || g_status == O_WIN)) {
-                    PlaySound(fxWin);
+                    if (g_settings.soundEnable) {
+                        PlaySound(fxWin);
+                    }
                 }
             }
+
         }
     }
     // 2. INPUT MOUSE
@@ -219,23 +223,36 @@ void saveGame(const std::string& filename) {
     f.close();
     std::cout << "Game saved to " << filename << std::endl;
 }
-
 bool loadGame(const std::string& filename) {
     std::ifstream f(filename);
+
+    //Kiểm tra file có mở được không
     if (!f.is_open()) {
         std::cout << "Cannot load: File not found " << filename << std::endl;
         return false;
     }
+    f.seekg(0, std::ios::end);
+    if (f.tellg() == 0) {
+        std::cout << "Error: File is empty " << filename << std::endl;
+        return false;
+    }
+    f.seekg(0, std::ios::beg);
     for (int i = 0; i < BOARD_SIZE; i++) {
         for (int j = 0; j < BOARD_SIZE; j++) {
             int val;
-            f >> val;
+            if (!(f >> val)) {
+                std::cout << "Error: Corrupted save file at cell [" << i << "][" << j << "]" << std::endl;
+                return false;
+            }
             g_board[i][j] = val;
         }
     }
 
     int turnVal;
-    f >> turnVal;
+    if (!(f >> turnVal)) {
+        std::cout << "Error: Missing turn data" << std::endl;
+        return false;
+    }
     g_turn = (turnVal == 1);
 
     f.close();
@@ -245,5 +262,6 @@ bool loadGame(const std::string& filename) {
     if (g_status != X_WIN && g_status != O_WIN && g_status != DRAW) {
         g_status = PLAYING;
     }
+
     return true;
 }

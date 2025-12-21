@@ -2,6 +2,7 @@
 #include "Game.h" 
 #include "raylib.h"
 #include <iostream>
+
 int g_menuChoice = 0;
 int g_loadChoice = 0;
 
@@ -47,15 +48,15 @@ void UpdateMenu(GameScreen& currentScreen) {
             InitGame();
             currentScreen = GAMEPLAY;
             break;
-        case 1: 
-            g_loadChoice = 0; 
+        case 1:
+            g_loadChoice = 0;
             currentScreen = LOAD;
             break;
         case 2: // ABOUT
             currentScreen = ABOUT;
             break;
-        case 3:
-            g_previousScreen = MENU; // SETTING
+        case 3: // SETTING
+            g_previousScreen = MENU;
             currentScreen = SETTING;
             break;
         case 4: // EXIT
@@ -96,6 +97,7 @@ void DrawMenu() {
         }
     }
 }
+
 void UpdateLoad(GameScreen& currentScreen) {
     if (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_UP)) {
         g_loadChoice = (g_loadChoice == 0) ? LOAD_COUNT - 1 : g_loadChoice - 1;
@@ -118,36 +120,43 @@ void UpdateLoad(GameScreen& currentScreen) {
         }
     }
 }
-
 void DrawLoad() {
     ClearBackground(WHITE);
+    // Vẽ nền
     Texture2D bg = game_textures.count("about_bg") ? game_textures["about_bg"] : game_textures["background"];
     DrawTexturePro(bg, { 0,0, (float)bg.width, (float)bg.height }, { 0,0,(float)SCREEN_WIDTH,(float)SCREEN_HEIGHT }, { 0,0 }, 0, WHITE);
-    const char* title = "SELECT SLOT";
-    int tSize = 100;
-    int tWidth = MeasureText(title, tSize);
-    DrawTextAndBorder(title, (SCREEN_WIDTH - tWidth) / 2, 100, tSize, 8, BLACK, GOLD);
+    float panelWidth = 1000;  
+    float panelHeight = 600;
+    float panelX = (SCREEN_WIDTH - panelWidth) / 2;
+    float panelY = (SCREEN_HEIGHT - panelHeight) / 2;
 
-    int startY = 350;
-    int spacing = 120;
+    DrawRectangle(panelX, panelY, panelWidth, panelHeight, Fade(CLITERAL(Color) { 10, 20, 40, 255 }, 0.9f));
+    DrawRectangleLinesEx(Rectangle{ panelX, panelY, panelWidth, panelHeight }, 5.0f, SKYBLUE);
+    DrawRectangleLinesEx(Rectangle{ panelX + 10, panelY + 10, panelWidth - 20, panelHeight - 20 }, 2.0f, DARKBLUE);
+    const char* title = "SELECT SLOT";
+    int tSize = 80;
+    int tWidth = MeasureText(title, tSize);
+    DrawTextAndBorder(title, (SCREEN_WIDTH - tWidth) / 2, panelY + 60, tSize, 6, BLACK, GOLD);
+    int startY = panelY + 220;
+    int spacing = 120;      
 
     for (int i = 0; i < LOAD_COUNT; i++) {
         Color TColor = (i == g_loadChoice) ? YELLOW : LIGHTGRAY;
         Color BColor = (i == g_loadChoice) ? DARKPURPLE : BLACK;
-        int fSize = 80;
+        int fSize = 70;
         int w = MeasureText(LOAD_ITEMS[i], fSize);
         int px = (SCREEN_WIDTH - w) / 2;
         int py = startY + i * spacing;
-        DrawTextAndBorder(LOAD_ITEMS[i], px, py, fSize, 6, BColor, TColor);
+
+        DrawTextAndBorder(LOAD_ITEMS[i], px, py, fSize, 5, BColor, TColor);
         if (i == g_loadChoice) {
-            DrawMenuArrow({ (float)px - 60, (float)py - 10 }, { (float)px + w + 60, (float)py + 90 });
+            DrawMenuArrow({ (float)px - 60, (float)py - 35 }, { (float)px + w + 60, (float)py + 90 });
         }
     }
-
-    const char* guide = "Press [ESC] to Back";
-    DrawText(guide, (SCREEN_WIDTH - MeasureText(guide, 30)) / 2, SCREEN_HEIGHT - 60, 30, DARKGRAY);
+    const char* guide = "Press [ENTER] to Load  -  [ESC] to Back";
+    int guideSize = 30;
+    DrawText(guide, (SCREEN_WIDTH - MeasureText(guide, guideSize)) / 2, panelY + panelHeight - 60, guideSize, GRAY);
 }
-// -----------------------------
 
 void DrawMenuArrow(Vector2 LeftArrow, Vector2 RightArrow) {
     DrawTextureEx(game_textures["choosen_arrow"], LeftArrow, 90, 0.25, WHITE);
@@ -170,7 +179,6 @@ void DrawTextAndBorder(const char* text, int posX, int posY, int Size, int Outli
     DrawText(text, posX, posY, Size, TColor);
 }
 
-//Màn hình About
 void UpdateAbout(GameScreen& currentScreen) {
     if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_ENTER)) {
         currentScreen = MENU;
@@ -183,18 +191,22 @@ void DrawAbout() {
     Rectangle bgSource = { 0.0, 0.0, (float)bg.width, (float)bg.height };
     Rectangle bgDest = { 0.0, 0.0, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT };
     DrawTexturePro(bg, bgSource, bgDest, { 0, 0 }, 0.0, WHITE);
+
     float panelWidth = 1200;
     float panelHeight = 800;
     float panelX = (SCREEN_WIDTH - panelWidth) / 2;
     float panelY = (SCREEN_HEIGHT - panelHeight) / 2;
     float centerX = SCREEN_WIDTH / 2;
+
     DrawRectangle(panelX, panelY, panelWidth, panelHeight, Fade(CLITERAL(Color) { 10, 20, 40, 255 }, 0.9f));
     DrawRectangleLinesEx(Rectangle{ panelX, panelY, panelWidth, panelHeight }, 5.0f, SKYBLUE);
     DrawRectangleLinesEx(Rectangle{ panelX + 10, panelY + 10, panelWidth - 20, panelHeight - 20 }, 2.0f, DARKBLUE);
+
     const char* mainTitle = "CARO GAME";
     int mainTitleSize = 100;
     DrawText(mainTitle, centerX - MeasureText(mainTitle, mainTitleSize) / 2 + 6, panelY + 60, mainTitleSize, BLACK);
     DrawText(mainTitle, centerX - MeasureText(mainTitle, mainTitleSize) / 2, panelY + 50, mainTitleSize, YELLOW);
+
     int currentY = panelY + 180;
     const char* teamTitle = "DEVELOPED BY [TEAM 2]";
     int headerSize = 40;

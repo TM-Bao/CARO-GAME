@@ -1,42 +1,39 @@
 ﻿  Game.cpp
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Game.cpp(96,19): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Game.cpp(97,19): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-  Main.cpp
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Game.cpp(146,19): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Game.cpp(147,19): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
   Menu.cpp
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(162,59): warning C4305: 'argument': truncation from 'double' to 'float'
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(191,47): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(191,35): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(191,27): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(191,19): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(196,89): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(196,77): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(197,85): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(197,33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(198,18): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(202,33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(209,46): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(210,33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(211,46): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(217,34): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(220,33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(223,33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(227,46): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(228,27): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(229,46): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(232,90): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(232,30): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-  settings.cpp
-E:\CARO_GAME\CARO-GAME\CARO\CARO\settings.cpp(81,47): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\settings.cpp(81,35): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\settings.cpp(81,27): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\settings.cpp(81,19): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\settings.cpp(92,65): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\settings.cpp(93,61): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\settings.cpp(96,23): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-E:\CARO_GAME\CARO-GAME\CARO\CARO\settings.cpp(129,75): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(133,47): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(133,35): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(133,27): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(133,19): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(139,66): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(140,16): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(158,94): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(171,59): warning C4305: 'argument': truncation from 'double' to 'float'
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(201,47): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(201,35): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(201,27): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(201,19): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(207,89): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(207,77): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(208,85): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(208,33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(210,18): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(214,33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(221,46): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(222,33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(223,46): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(229,34): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(232,33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(235,33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(239,46): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(240,27): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(241,46): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(244,90): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+E:\CARO_GAME\CARO-GAME\CARO\CARO\Menu.cpp(244,30): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   Generating code
-  4 of 315 functions ( 1.3%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  9 of 318 functions ( 2.8%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    9 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   CARO.vcxproj -> E:\CARO_GAME\CARO-GAME\CARO\x64\Release\CARO.exe
