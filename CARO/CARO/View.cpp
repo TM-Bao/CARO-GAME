@@ -8,10 +8,9 @@ static Texture2D texX;
 static Texture2D texO;
 static Font customFont;
 
-
 Texture2D GenXTexture(int size, Color color) {
     Image img = GenImageColor(size, size, BLANK);
-    int thickness = 5; 
+    int thickness = 5;
     for (int i = 0; i < size; i++) {
         for (int t = -thickness; t <= thickness; t++) {
             ImageDrawPixel(&img, i, i + t, color);
@@ -26,20 +25,18 @@ Texture2D GenXTexture(int size, Color color) {
     return tex;
 }
 
-
 Texture2D GenOTexture(int size, Color color) {
     RenderTexture2D target = LoadRenderTexture(size, size);
     BeginTextureMode(target);
-    ClearBackground(BLANK); 
+    ClearBackground(BLANK);
     Vector2 center = { size / 2.0f, size / 2.0f };
-    float outerRadius = (size / 2.0f) - 4.0f; 
-    float innerRadius = outerRadius - 7.0f;   
+    float outerRadius = (size / 2.0f) - 4.0f;
+    float innerRadius = outerRadius - 7.0f;
     DrawRing(center, innerRadius, outerRadius, 0, 360, 0, color);
     EndTextureMode();
     Image img = LoadImageFromTexture(target.texture);
-    ImageFlipVertical(&img); 
+    ImageFlipVertical(&img);
     Texture2D finalTex = LoadTextureFromImage(img);
-
 
     UnloadImage(img);
     UnloadRenderTexture(target);
@@ -62,7 +59,6 @@ void UnloadGameView() {
 void DrawGameView() {
     // 1. Vẽ nền 
     ClearBackground(HSR_BG);
-
     // 2. Vẽ viền bàn cờ 2 lớp 
     DrawRectangle(BOARD_OFFSET_X - 15, BOARD_OFFSET_Y - 15, BOARD_WIDTH + 30, BOARD_WIDTH + 30, HSR_FRAME);
     DrawRectangle(BOARD_OFFSET_X - 5, BOARD_OFFSET_Y - 5, BOARD_WIDTH + 10, BOARD_WIDTH + 10, HSR_SUB_FRAME);
@@ -105,7 +101,8 @@ void DrawGameView() {
     Color p2Color = !g_turn ? HSR_SQUARE_LIGHT : RED;
     Color p1Highlight = g_turn ? YELLOW : HSR_FRAME;
     Color p2Highlight = !g_turn ? YELLOW : HSR_FRAME;
-//Player 1
+
+    // Player 1
     DrawRectangle(leftPanelX, panelY, panelWidth, panelHeight, HSR_FRAME);
     DrawRectangleLinesEx(Rectangle{ (float)leftPanelX, (float)panelY, (float)panelWidth, (float)panelHeight }, 5.0f, p1Highlight);
 
@@ -114,12 +111,11 @@ void DrawGameView() {
     DrawTextEx(customFont, p1Text,
         Vector2{ (float)(leftPanelX + (panelWidth - p1TextSize.x) / 2), (float)(panelY + 60) },
         40.0f, 1.0f, p1Color);
+
     if (g_settings.inputMode == INPUT_KEYBOARD) {
         Color guideColor = g_turn ? GOLD : GRAY;
-
         DrawTextEx(customFont, "MOVE: [W] [A] [S] [D]",
             Vector2{ (float)(leftPanelX + 40), (float)(panelY + 120) }, 25.0f, 1.0f, guideColor);
-
         DrawTextEx(customFont, "PLACE: [SPACE] / [ENTER]",
             Vector2{ (float)(leftPanelX + 40), (float)(panelY + 160) }, 25.0f, 1.0f, guideColor);
     }
@@ -127,7 +123,8 @@ void DrawGameView() {
         DrawTextEx(customFont, "MODE: MOUSE CLICK",
             Vector2{ (float)(leftPanelX + 40), (float)(panelY + 140) }, 30.0f, 1.0f, LIGHTGRAY);
     }
-//Player 2
+
+    // Player 2
     DrawRectangle(rightPanelX, panelY, panelWidth, panelHeight, HSR_FRAME);
     DrawRectangleLinesEx(Rectangle{ (float)rightPanelX, (float)panelY, (float)panelWidth, (float)panelHeight }, 5.0f, p2Highlight);
 
@@ -136,13 +133,11 @@ void DrawGameView() {
     DrawTextEx(customFont, p2Text,
         Vector2{ (float)(rightPanelX + (panelWidth - p2TextSize.x) / 2), (float)(panelY + 60) },
         40.0f, 1.0f, p2Color);
-    float subTextSize = 32.0f;
+
     if (g_settings.inputMode == INPUT_KEYBOARD) {
         Color guideColor = !g_turn ? GOLD : GRAY;
-
         DrawTextEx(customFont, "MOVE: [ARROW KEYS]",
             Vector2{ (float)(rightPanelX + 40), (float)(panelY + 120) }, 25.0f, 1.0f, guideColor);
-
         DrawTextEx(customFont, "PLACE: [SPACE] / [ENTER]",
             Vector2{ (float)(rightPanelX + 40), (float)(panelY + 160) }, 25.0f, 1.0f, guideColor);
     }
@@ -150,21 +145,18 @@ void DrawGameView() {
         DrawTextEx(customFont, "MODE: MOUSE CLICK",
             Vector2{ (float)(rightPanelX + 40), (float)(panelY + 140) }, 30.0f, 1.0f, LIGHTGRAY);
     }
-
-    const char* saveText = u8"";
+    float subTextSize = 32.0f;
+    const char* saveText = u8"PRESS [ESC] TO PAUSE / SAVE"; // Đổi text này cho phù hợp
     Vector2 saveTextSize = MeasureTextEx(customFont, saveText, subTextSize, 1.0f);
     float saveX = leftPanelX + (panelWidth - saveTextSize.x) / 2;
     DrawTextEx(customFont, saveText,
         Vector2{ saveX, (float)(panelY + panelHeight + 20) },
         subTextSize, 1.0f, BLACK);
+
     const char* menuText = u8"PRESS [ESC] TO RETURN TO MENU";
     Vector2 menuTextSize = MeasureTextEx(customFont, menuText, subTextSize, 1.0f);
     float menuX = rightPanelX + (panelWidth - menuTextSize.x) / 2;
-    DrawTextEx(customFont, menuText,
-        Vector2{ menuX, (float)(panelY + panelHeight + 20) },
-        subTextSize, 1.0f, BLACK);
-
-    if (g_status != PLAYING) {
+    if (g_status != PLAYING && g_status != PAUSE) {
         if (g_status == X_WIN || g_status == O_WIN) {
             Vector2 startPos = {
                 (float)(BOARD_OFFSET_X + winStartX * CELL_SIZE + CELL_SIZE / 2),
@@ -182,7 +174,6 @@ void DrawGameView() {
             DrawCircleV(startPos, 3.0f, GOLD);
             DrawCircleV(endPos, 3.0f, GOLD);
         }
-
 
         const char* winnerText = "";
         Color winnerColor = WHITE;
@@ -209,6 +200,7 @@ void DrawGameView() {
         DrawTextEx(customFont, winnerText, Vector2{ textPos.x, textPos.y - stroke }, titleSize, 1.0f, BLACK);
         DrawTextEx(customFont, winnerText, Vector2{ textPos.x, textPos.y + stroke }, titleSize, 1.0f, BLACK);
         DrawTextEx(customFont, winnerText, textPos, titleSize, 1.0f, winnerColor);
+
         const char* guideText = "PRESS [Y] TO RESTART   |   [ESC] TO MENU";
         Vector2 guideSize = MeasureTextEx(customFont, guideText, subSize, 1.0f);
         Vector2 guidePos = { (GetScreenWidth() - guideSize.x) / 2, GetScreenHeight() - 60.0f };
@@ -217,33 +209,14 @@ void DrawGameView() {
         DrawTextEx(customFont, guideText, Vector2{ guidePos.x + stroke, guidePos.y }, subSize, 1.0f, BLACK);
         DrawTextEx(customFont, guideText, Vector2{ guidePos.x, guidePos.y - stroke }, subSize, 1.0f, BLACK);
         DrawTextEx(customFont, guideText, Vector2{ guidePos.x, guidePos.y + stroke }, subSize, 1.0f, BLACK);
-
-
         DrawTextEx(customFont, guideText, guidePos, subSize, 1.0f, WHITE);
-        Rectangle btnSetting = { (float)SCREEN_WIDTH - 170, 20, 150, 50 };
-        bool isHover = CheckCollisionPointRec(GetMousePosition(), btnSetting);
-        Color btnColor = isHover ? SKYBLUE : RED;
-        DrawRectangleRec(btnSetting, btnColor);
-        DrawRectangleLinesEx(btnSetting, 3, DARKBLUE);
-        DrawText("SETTINGS", btnSetting.x + 25, btnSetting.y + 15, 20, DARKBLUE);
     }
-    if (g_status != PLAYING && g_status == PAUSE) {
-        DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), CLITERAL(Color){ 0, 0, 0, 180 });
-        const char* text = "DO YOU WANT TO SAVE BEFORE EXIT?";
-        float titleSize = 80.0f;
-        Vector2 textSize = MeasureTextEx(customFont, text, titleSize, 1.0f);
-        Vector2 textPos = { (float)(GetScreenWidth() - textSize.x) / 2, (float)(GetScreenHeight() / 2 - 80) };
-        DrawTextEx(customFont, text, Vector2{ textPos.x + 5, textPos.y + 5 }, titleSize, 1.0f, BLACK);
-        DrawTextEx(customFont, text, textPos, titleSize, 1.0f, GOLD);
-        const char* quitText = "PRESS NUMBER [1], [2] OR [3] TO SAVE GAME TO THE FOLOWING SLOTS OR [N] TO EXIT OR [C] TO CONTINUE";
-        float subSize = 30.0f;
-        textSize = MeasureTextEx(customFont, quitText, subSize, 1.0f);
-        textPos = Vector2{ (float)(GetScreenWidth() - textSize.x) / 2, (float)(GetScreenHeight() / 2 + 40) };
-        DrawTextEx(customFont, quitText, Vector2{ textPos.x + 3, textPos.y + 3 }, subSize, 1.0f, BLACK);
-        DrawTextEx(customFont, quitText, textPos, subSize, 1.0f, WHITE);
-
-    }
-
+    Rectangle btnSetting = { (float)SCREEN_WIDTH - 170, 20, 150, 50 };
+    bool isHover = CheckCollisionPointRec(GetMousePosition(), btnSetting);
+    Color btnColor = isHover ? SKYBLUE : RED;
+    DrawRectangleRec(btnSetting, btnColor);
+    DrawRectangleLinesEx(btnSetting, 3, DARKBLUE);
+    DrawText("SETTINGS", btnSetting.x + 25, btnSetting.y + 15, 20, DARKBLUE);
     for (int i = 0; i < 5; i++) {
         DrawRectangleLines(
             BOARD_OFFSET_X + g_cursorX * CELL_SIZE + i,
@@ -252,5 +225,27 @@ void DrawGameView() {
             CELL_SIZE - 2 * i,
             YELLOW
         );
+    }
+    if (g_status == PAUSE) {
+        DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Fade(BLACK, 0.7f));
+
+        const char* txtPause = "GAME PAUSED";
+        const char* txtSave1 = "Press [1] to Save Slot 1";
+        const char* txtSave2 = "Press [2] to Save Slot 2";
+        const char* txtSave3 = "Press [3] to Save Slot 3";
+        const char* txtResume = "Press [C] to Resume";
+        const char* txtMenu = "Press [N] to Main Menu";
+
+        int centerX = SCREEN_WIDTH / 2;
+        int centerY = SCREEN_HEIGHT / 2;
+
+        DrawText(txtPause, centerX - MeasureText(txtPause, 60) / 2, centerY - 150, 60, WHITE);
+        DrawRectangleLines(centerX - 200, centerY - 80, 400, 160, GOLD);
+        DrawText(txtSave1, centerX - MeasureText(txtSave1, 30) / 2, centerY - 50, 30, GOLD);
+        DrawText(txtSave2, centerX - MeasureText(txtSave2, 30) / 2, centerY, 30, GOLD);
+        DrawText(txtSave3, centerX - MeasureText(txtSave3, 30) / 2, centerY + 50, 30, GOLD);
+
+        DrawText(txtResume, centerX - MeasureText(txtResume, 25) / 2, centerY + 120, 25, LIGHTGRAY);
+        DrawText(txtMenu, centerX - MeasureText(txtMenu, 25) / 2, centerY + 160, 25, LIGHTGRAY);
     }
 }

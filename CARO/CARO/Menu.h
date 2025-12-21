@@ -7,14 +7,14 @@
 #include "raylib.h"
 
 
-extern int g_menuChoice; 
+extern int g_menuChoice;
 
 
 extern std::map<std::string, Texture2D> game_textures;
 
 //Màn hình Menu
 void InitMenu();
-void UpdateMenu(GameScreen& currentScreen); 
+void UpdateMenu(GameScreen& currentScreen);
 void DrawMenu();   // Vẽ menu
 void DrawMenuArrow(Vector2 LeftArrow, Vector2 RightArrow);
 void DrawImage();
