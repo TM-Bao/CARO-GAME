@@ -33,14 +33,14 @@ int main(void) {
         case GAMEPLAY:
             UpdateGame(currentScreen);
             break;
+        case LOAD:
+            UpdateLoad(currentScreen);
+            break;
         case ABOUT:
             UpdateAbout(currentScreen);
             break;
         case SETTING:
             UpdateSetting(currentScreen);
-            break;
-        case LOAD: 
-            UpdateLoad(currentScreen);
             break;
         }
 
@@ -57,14 +57,14 @@ int main(void) {
         case GAMEPLAY:
             DrawGameView();
             break;
+        case LOAD:
+            DrawLoad();
+            break;
         case ABOUT:
             DrawAbout();
             break;
         case SETTING:
             DrawSetting();
-            break;
-        case LOAD:
-            DrawLoad();
             break;
         }
 

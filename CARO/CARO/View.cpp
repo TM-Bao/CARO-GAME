@@ -1,6 +1,7 @@
 ﻿#include "View.h"
 #include "Game.h"
 #include "settings.h"
+#include<iostream>
 #pragma execution_character_set("utf-8")
 
 static Texture2D texX;

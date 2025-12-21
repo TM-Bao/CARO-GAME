@@ -1,4 +1,4 @@
-﻿#include "Menu.h"
+#include "Menu.h"
 #include "Game.h" 
 #include "raylib.h"
 #include <iostream>
