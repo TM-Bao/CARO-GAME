@@ -150,7 +150,7 @@ void DrawLoad() {
 
         DrawTextAndBorder(LOAD_ITEMS[i], px, py, fSize, 5, BColor, TColor);
         if (i == g_loadChoice) {
-            DrawMenuArrow({ (float)px - 60, (float)py - 10 }, { (float)px + w + 60, (float)py + 80 });
+            DrawMenuArrow({ (float)px - 60, (float)py - 35 }, { (float)px + w + 60, (float)py + 90 });
         }
     }
     const char* guide = "Press [ENTER] to Load  -  [ESC] to Back";
