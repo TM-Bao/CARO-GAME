@@ -2,22 +2,29 @@
 #include "Game.h" 
 #include "raylib.h"
 #include <iostream>
-int g_menuChoice = 0; //
+int g_menuChoice = 0;
+int g_loadChoice = 0;
+
 const char* MENU_ITEMS[] = { "NEW GAME", "LOAD GAME", "ABOUT", "SETTING", "EXIT" };
-const char* MEMBERS[][3] = { 
+const char* LOAD_ITEMS[] = { "SLOT 1", "SLOT 2", "SLOT 3" };
+
+const char* MEMBERS[][3] = {
     {"TUAN HUNG", "SOK MINH", "TRUONG GIANG"},
-    {"GIA BAO", "QUOC ANH", "DUC THINH"} 
+    {"GIA BAO", "QUOC ANH", "DUC THINH"}
 };
 const char* TOOLS[] = { "C++", "RAYLIB" };
+
 const int MENU_COUNT = 5;
+const int LOAD_COUNT = 3;
 const int MEMBERS_ROW = 2;
 const int MEMBERS_COL = 3;
 const int TOOLS_COUNT = 2;
-std::map<std::string, Texture2D> game_textures; 
 
+std::map<std::string, Texture2D> game_textures;
 
 void InitMenu() {
     g_menuChoice = 0;
+    g_loadChoice = 0;
     game_textures["background"] = LoadTexture("assects/images/background.png");
     game_textures["X_icon"] = LoadTexture("assects/images/X_intro.png");
     game_textures["O_icon"] = LoadTexture("assects/images/O_intro.png");
@@ -34,15 +41,15 @@ void UpdateMenu(GameScreen& currentScreen) {
         g_menuChoice = (g_menuChoice == MENU_COUNT - 1) ? 0 : g_menuChoice + 1;
     }
 
-    if (IsKeyPressed(KEY_ENTER)) { //
+    if (IsKeyPressed(KEY_ENTER)) {
         switch (g_menuChoice) {
         case 0: // NEW GAME
-            InitGame(); 
+            InitGame();
             currentScreen = GAMEPLAY;
             break;
-        case 1: // LOAD GAME
-            loadGame("save.txt"); 
-            currentScreen = GAMEPLAY;
+        case 1: 
+            g_loadChoice = 0; 
+            currentScreen = LOAD;
             break;
         case 2: // ABOUT
             currentScreen = ABOUT;
@@ -50,7 +57,8 @@ void UpdateMenu(GameScreen& currentScreen) {
         case 3: // SETTING
             currentScreen = SETTING;
             break;
-        case 4: //EXIT
+        case 4: // EXIT
+            CloseWindow();
             break;
         }
     }
@@ -70,8 +78,8 @@ void DrawMenu() {
     DrawTextAndBorder("CARO GAME", title_posX, title_posY, 180, 15, RED, SKYBLUE);
     DrawImage();
 
-    int menu_start_y = 350; 
-    int menu_spacing = 100;  
+    int menu_start_y = 350;
+    int menu_spacing = 100;
     for (int i = 0; i < MENU_COUNT; i++) {
         Color TColor = (i == g_menuChoice) ? YELLOW : LIGHTGRAY;
         Color BColor = (i == g_menuChoice) ? DARKPURPLE : BLACK;
@@ -81,13 +89,65 @@ void DrawMenu() {
         int text_xend_position = (text_x_position + textWidth);
         DrawTextAndBorder(MENU_ITEMS[i], text_x_position, text_y_position, 100, 10, BColor, TColor);
         if (i == g_menuChoice) {
-            Vector2 LeftArrow_position = { text_x_position - 50, text_y_position - 20 };
-            Vector2 RightArrow_position = { text_xend_position + 50, text_y_position + 105 };
+            Vector2 LeftArrow_position = { (float)text_x_position - 50, (float)text_y_position - 20 };
+            Vector2 RightArrow_position = { (float)text_xend_position + 50, (float)text_y_position + 105 };
             DrawMenuArrow(LeftArrow_position, RightArrow_position);
         }
     }
-
 }
+void UpdateLoad(GameScreen& currentScreen) {
+    if (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_UP)) {
+        g_loadChoice = (g_loadChoice == 0) ? LOAD_COUNT - 1 : g_loadChoice - 1;
+    }
+    if (IsKeyPressed(KEY_S) || IsKeyPressed(KEY_DOWN)) {
+        g_loadChoice = (g_loadChoice == LOAD_COUNT - 1) ? 0 : g_loadChoice + 1;
+    }
+    if (IsKeyPressed(KEY_ESCAPE)) {
+        currentScreen = MENU;
+    }
+
+    if (IsKeyPressed(KEY_ENTER)) {
+        bool success = false;
+        if (g_loadChoice == 0) success = loadGame("save1.txt");
+        if (g_loadChoice == 1) success = loadGame("save2.txt");
+        if (g_loadChoice == 2) success = loadGame("save3.txt");
+
+        if (success) {
+            currentScreen = GAMEPLAY;
+        }
+    }
+}
+
+void DrawLoad() {
+    ClearBackground(WHITE);
+    Texture2D bg = game_textures.count("about_bg") ? game_textures["about_bg"] : game_textures["background"];
+    DrawTexturePro(bg, { 0,0, (float)bg.width, (float)bg.height }, { 0,0,(float)SCREEN_WIDTH,(float)SCREEN_HEIGHT }, { 0,0 }, 0, WHITE);
+    const char* title = "SELECT SLOT";
+    int tSize = 100;
+    int tWidth = MeasureText(title, tSize);
+    DrawTextAndBorder(title, (SCREEN_WIDTH - tWidth) / 2, 100, tSize, 8, BLACK, GOLD);
+
+    int startY = 350;
+    int spacing = 120;
+
+    for (int i = 0; i < LOAD_COUNT; i++) {
+        Color TColor = (i == g_loadChoice) ? YELLOW : LIGHTGRAY;
+        Color BColor = (i == g_loadChoice) ? DARKPURPLE : BLACK;
+        int fSize = 80;
+        int w = MeasureText(LOAD_ITEMS[i], fSize);
+        int px = (SCREEN_WIDTH - w) / 2;
+        int py = startY + i * spacing;
+        DrawTextAndBorder(LOAD_ITEMS[i], px, py, fSize, 6, BColor, TColor);
+        if (i == g_loadChoice) {
+            DrawMenuArrow({ (float)px - 60, (float)py - 10 }, { (float)px + w + 60, (float)py + 90 });
+        }
+    }
+
+    const char* guide = "Press [ESC] to Back";
+    DrawText(guide, (SCREEN_WIDTH - MeasureText(guide, 30)) / 2, SCREEN_HEIGHT - 60, 30, DARKGRAY);
+}
+// -----------------------------
+
 void DrawMenuArrow(Vector2 LeftArrow, Vector2 RightArrow) {
     DrawTextureEx(game_textures["choosen_arrow"], LeftArrow, 90, 0.25, WHITE);
     DrawTextureEx(game_textures["choosen_arrow"], RightArrow, -90, 0.25, WHITE);
@@ -115,6 +175,7 @@ void UpdateAbout(GameScreen& currentScreen) {
         currentScreen = MENU;
     }
 }
+
 void DrawAbout() {
     ClearBackground(WHITE);
     Texture2D bg = game_textures["about_bg"];
@@ -130,15 +191,15 @@ void DrawAbout() {
     DrawRectangleLinesEx(Rectangle{ panelX, panelY, panelWidth, panelHeight }, 5.0f, SKYBLUE);
     DrawRectangleLinesEx(Rectangle{ panelX + 10, panelY + 10, panelWidth - 20, panelHeight - 20 }, 2.0f, DARKBLUE);
     const char* mainTitle = "CARO GAME";
-    int mainTitleSize = 100; 
+    int mainTitleSize = 100;
     DrawText(mainTitle, centerX - MeasureText(mainTitle, mainTitleSize) / 2 + 6, panelY + 60, mainTitleSize, BLACK);
     DrawText(mainTitle, centerX - MeasureText(mainTitle, mainTitleSize) / 2, panelY + 50, mainTitleSize, YELLOW);
-    int currentY = panelY + 180; 
+    int currentY = panelY + 180;
     const char* teamTitle = "DEVELOPED BY [TEAM 2]";
-    int headerSize = 40; 
-    int nameSize = 32;   
+    int headerSize = 40;
+    int nameSize = 32;
     DrawText(teamTitle, centerX - MeasureText(teamTitle, headerSize) / 2, currentY, headerSize, SKYBLUE);
-    currentY += 60; 
+    currentY += 60;
     int colSpacing = 380;
     for (int i = 0; i < MEMBERS_ROW; i++) {
         const char* name1 = MEMBERS[i][0];
@@ -147,21 +208,21 @@ void DrawAbout() {
         DrawText(name1, centerX - colSpacing - MeasureText(name1, nameSize) / 2, currentY, nameSize, WHITE);
         DrawText(name2, centerX - MeasureText(name2, nameSize) / 2, currentY, nameSize, WHITE);
         DrawText(name3, centerX + colSpacing - MeasureText(name3, nameSize) / 2, currentY, nameSize, WHITE);
-        currentY += 50; 
+        currentY += 50;
     }
-    currentY += 50; 
+    currentY += 50;
     const char* instrTitle = "INSTRUCTOR";
     const char* instrName = "TRUONG TOAN THINH";
     DrawText(instrTitle, centerX - MeasureText(instrTitle, headerSize) / 2, currentY, headerSize, SKYBLUE);
     currentY += 60;
     int instrNameSize = 55;
     DrawText(instrName, centerX - MeasureText(instrName, instrNameSize) / 2, currentY, instrNameSize, GOLD);
-    currentY += 100; 
+    currentY += 100;
     const char* techTitle = "TECHNOLOGY USED";
     DrawText(techTitle, centerX - MeasureText(techTitle, headerSize) / 2, currentY, headerSize, SKYBLUE);
     currentY += 60;
     int techSize = 45;
-    int techSpacing = 180; 
+    int techSpacing = 180;
     DrawText(TOOLS[0], centerX - techSpacing - MeasureText(TOOLS[0], techSize) / 2, currentY, techSize, WHITE);
     DrawText("|", centerX - MeasureText("|", techSize) / 2, currentY, techSize, DARKGRAY);
     DrawText(TOOLS[1], centerX + techSpacing - MeasureText(TOOLS[1], techSize) / 2, currentY, techSize, WHITE);
@@ -169,79 +230,7 @@ void DrawAbout() {
     int footerSize = 30;
     DrawText(footer, centerX - MeasureText(footer, footerSize) / 2, panelY + panelHeight - 50, footerSize, GRAY);
 }
-<<<<<<< Updated upstream
-=======
-void UpdateLoad(GameScreen& currentScreen) {
-    // ... (Giữ nguyên phần điều khiển lên xuống) ...
-    if (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_UP)) {
-        g_loadChoice = (g_loadChoice == 0) ? LOAD_SLOT - 1 : g_loadChoice - 1;
-    }
-    if (IsKeyPressed(KEY_S) || IsKeyPressed(KEY_DOWN)) {
-        g_loadChoice = (g_loadChoice == LOAD_SLOT - 1) ? 0 : g_loadChoice + 1;
-    }
 
-    if (IsKeyPressed(KEY_ENTER)) {
-        bool isLoaded = false; // Biến kiểm tra load thành công
-
-        switch (g_loadChoice) {
-        case 0:
-            isLoaded = loadGame("save1.txt");
-            break;
-        case 1:
-            isLoaded = loadGame("save2.txt");
-            break;
-        case 2:
-            isLoaded = loadGame("save3.txt");
-            break;
-        }
-        if (isLoaded) {
-            currentScreen = GAMEPLAY;
-        }
-        else {
-            std::cout << "Load failed!" << std::endl;
-        }
-    }
-
-    if (IsKeyPressed(KEY_ESCAPE)) {
-        currentScreen = MENU;
-    }
-}
-void DrawLoad() {
-    ClearBackground(WHITE);
-    Texture2D bg = game_textures["about_bg"];
-    Rectangle bgSource = { 0.0, 0.0, (float)bg.width, (float)bg.height };
-    Rectangle bgDest = { 0.0, 0.0, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT };
-    DrawTexturePro(bg, bgSource, bgDest, { 0, 0 }, 0.0, WHITE);
-    float panelWidth = 1200;
-    float panelHeight = 800;
-    float panelX = (SCREEN_WIDTH - panelWidth) / 2;
-    float panelY = (SCREEN_HEIGHT - panelHeight) / 2;
-    float centerX = SCREEN_WIDTH / 2;
-    DrawRectangle(panelX, panelY, panelWidth, panelHeight, Fade(CLITERAL(Color) { 10, 20, 40, 255 }, 0.9f));
-    DrawRectangleLinesEx(Rectangle{ panelX, panelY, panelWidth, panelHeight }, 5.0f, SKYBLUE);
-    DrawRectangleLinesEx(Rectangle{ panelX + 10, panelY + 10, panelWidth - 20, panelHeight - 20 }, 2.0f, DARKBLUE);
-    const char* mainTitle = "LOAD MENU";
-    int mainTitleSize = 100;
-    DrawText(mainTitle, centerX - MeasureText(mainTitle, mainTitleSize) / 2 + 6, panelY + 60, mainTitleSize, BLACK);
-    DrawText(mainTitle, centerX - MeasureText(mainTitle, mainTitleSize) / 2, panelY + 50, mainTitleSize, YELLOW);
-    int currentY = panelY + 180;
-    int menu_start_y = 350;
-    int menu_spacing = 100;
-    for (int i = 0; i < LOAD_SLOT; i++) {
-        Color TColor = (i == g_loadChoice) ? YELLOW : LIGHTGRAY;
-        Color BColor = (i == g_loadChoice) ? DARKPURPLE : BLACK;
-        int textWidth = MeasureText(LOAD_SLOTS[i], 100);
-        int text_x_position = (SCREEN_WIDTH - textWidth) / 2;
-        int text_y_position = menu_start_y + i * menu_spacing;
-        int text_xend_position = (text_x_position + textWidth);
-        DrawTextAndBorder(LOAD_SLOTS[i], text_x_position, text_y_position, 100, 10, BColor, TColor);
-    }
-    const char* footer = "Press [ESC] to Return Menu";
-    int footerSize = 30;
-    DrawText(footer, centerX - MeasureText(footer, footerSize) / 2, panelY + panelHeight - 50, footerSize, GRAY);
-}
-
->>>>>>> Stashed changes
 void UnloadAllTextures() {
     for (auto pair : game_textures) {
         UnloadTexture(pair.second);

@@ -4,7 +4,6 @@
 #include "Global.h"
 #include <string> 
 #include <map>
-
 extern int g_board[BOARD_SIZE][BOARD_SIZE];
 extern bool g_turn;
 extern GameStatus g_status;
