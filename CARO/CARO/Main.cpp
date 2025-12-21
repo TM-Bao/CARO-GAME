@@ -42,9 +42,6 @@ int main(void) {
         case SETTING:
             UpdateSetting(currentScreen);
             break;
-        case LOAD: 
-            UpdateLoad(currentScreen);
-            break;
         }
 
         if (currentScreen == MENU && g_menuChoice == 4 && IsKeyPressed(KEY_ENTER)) {
@@ -68,9 +65,6 @@ int main(void) {
             break;
         case SETTING:
             DrawSetting();
-            break;
-        case LOAD:
-            DrawLoad();
             break;
         }
 
