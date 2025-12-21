@@ -24,7 +24,7 @@ void Movement_X(int& cursorX, int& cursorY);
 void Movement_O(int& cursorX, int& cursorY);
 
 void saveGame(const std::string& filename);
-void loadGame(const std::string& filename);
+bool loadGame(const std::string& filename);
 
 #endif // _GAME_H_
 

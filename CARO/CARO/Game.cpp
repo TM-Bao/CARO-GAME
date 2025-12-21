@@ -97,23 +97,9 @@ void UpdateGame(GameScreen& currentScreen) {
     if (g_status == PAUSE && IsKeyPressed(KEY_N)) {
         currentScreen = MENU;
     }
-    if (g_status == PAUSE && IsKeyPressed(KEY_C)) {
-        g_status = PLAYING;
-    }
-    if (g_status == PAUSE && IsKeyDown(KEY_ONE)) {
-        saveGame("save1.txt");
-        currentScreen = MENU;
-    }
-    if (g_status == PAUSE && IsKeyDown(KEY_TWO)) {
-        saveGame("save2.txt");
-        currentScreen = MENU;
-    }
-    if (g_status == PAUSE && IsKeyDown(KEY_THREE)) {
         saveGame("save3.txt");
         currentScreen = MENU;
-    }
-
-    
+    } 
 //XỬ LÝ LOGIC CHƠI BẰNG BÀN PHÍM
     if (g_settings.inputMode == INPUT_KEYBOARD) {
         if (g_turn) Movement_X(g_cursorX, g_cursorY); //X
@@ -235,16 +221,26 @@ void saveGame(const std::string& filename) {
     f.close();
 }
 
-void loadGame(const std::string& filename) {
+bool loadGame(const std::string& filename) {
     std::ifstream f(filename);
-    if (!f.is_open()) return; //
+    if (!f.is_open()) {
+        std::cout << "Khong tim thay file save: " << filename << std::endl;
+        return false; 
+    }
     for (int i = 0; i < BOARD_SIZE; i++) {
         for (int j = 0; j < BOARD_SIZE; j++) {
-            int val; f >> val;
+            int val;
+            f >> val;
             g_board[i][j] = val;
         }
     }
     f >> g_turn;
     f.close();
-    g_status = PLAYING; // Sẵn sàng chơi
+    g_cursorX = BOARD_SIZE / 2;
+    g_cursorY = BOARD_SIZE / 2;
+    g_status = TestBoard();
+    if (g_status != X_WIN && g_status != O_WIN && g_status != DRAW) {
+        g_status = PLAYING;
+    }
+    return true;
 }

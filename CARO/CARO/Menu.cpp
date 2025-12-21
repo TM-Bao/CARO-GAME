@@ -1,6 +1,7 @@
-﻿#include "Menu.h"
+#include "Menu.h"
 #include "Game.h" 
 #include "raylib.h"
+#include <iostream>
 int g_menuChoice = 0; //
 int g_loadChoice = 0;
 
@@ -171,33 +172,38 @@ void DrawAbout() {
     int footerSize = 30;
     DrawText(footer, centerX - MeasureText(footer, footerSize) / 2, panelY + panelHeight - 50, footerSize, GRAY);
 }
-void UpdateLoad(GameScreen& currentScreen) {
     if (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_UP)) {
         g_loadChoice = (g_loadChoice == 0) ? LOAD_SLOT - 1 : g_loadChoice - 1;
     }
     if (IsKeyPressed(KEY_S) || IsKeyPressed(KEY_DOWN)) {
         g_loadChoice = (g_loadChoice == LOAD_SLOT - 1) ? 0 : g_loadChoice + 1;
     }
-    if (IsKeyPressed(KEY_ENTER)) { //
+
+    if (IsKeyPressed(KEY_ENTER)) {
+        bool isLoaded = false; // Biến kiểm tra load thành công
+
         switch (g_loadChoice) {
         case 0:
-            loadGame("save1.txt");
-            currentScreen = GAMEPLAY;
+            isLoaded = loadGame("save1.txt");
             break;
         case 1:
-            loadGame("save2.txt");
-            currentScreen = GAMEPLAY;
+            isLoaded = loadGame("save2.txt");
             break;
         case 2:
-            loadGame("save3.txt");
-            currentScreen = GAMEPLAY;
+            isLoaded = loadGame("save3.txt");
             break;
         }
+        if (isLoaded) {
+            currentScreen = GAMEPLAY;
+        }
+        else {
+            std::cout << "Load failed!" << std::endl;
+        }
     }
+
     if (IsKeyPressed(KEY_ESCAPE)) {
         currentScreen = MENU;
     }
-
 }
 void DrawLoad() {
     ClearBackground(WHITE);
@@ -233,7 +239,6 @@ void DrawLoad() {
     int footerSize = 30;
     DrawText(footer, centerX - MeasureText(footer, footerSize) / 2, panelY + panelHeight - 50, footerSize, GRAY);
 }
-
 void UnloadAllTextures() {
     for (auto pair : game_textures) {
         UnloadTexture(pair.second);
