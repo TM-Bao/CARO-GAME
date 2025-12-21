@@ -86,10 +86,34 @@ void UpdateGame(GameScreen& currentScreen) {
             return;
         }
     }
-    if (g_status != PLAYING) {
+    if (g_status != PLAYING && g_status != PAUSE) {
         if (IsKeyPressed(KEY_Y)) InitGame();
         return;
+        if (IsKeyPressed(KEY_Y)) currentScreen = MENU;
     }
+    if (IsKeyPressed(KEY_ESCAPE)) {
+        g_status = PAUSE;
+    }
+    if (g_status == PAUSE && IsKeyPressed(KEY_N)) {
+        currentScreen = MENU;
+    }
+    if (g_status == PAUSE && IsKeyPressed(KEY_C)) {
+        g_status = PLAYING;
+    }
+    if (g_status == PAUSE && IsKeyDown(KEY_ONE)) {
+        saveGame("save1.txt");
+        currentScreen = MENU;
+    }
+    if (g_status == PAUSE && IsKeyDown(KEY_TWO)) {
+        saveGame("save2.txt");
+        currentScreen = MENU;
+    }
+    if (g_status == PAUSE && IsKeyDown(KEY_THREE)) {
+        saveGame("save3.txt");
+        currentScreen = MENU;
+    }
+
+    
 //XỬ LÝ LOGIC CHƠI BẰNG BÀN PHÍM
     if (g_settings.inputMode == INPUT_KEYBOARD) {
         if (g_turn) Movement_X(g_cursorX, g_cursorY); //X
