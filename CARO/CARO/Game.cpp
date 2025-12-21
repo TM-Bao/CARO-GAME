@@ -51,7 +51,7 @@ void Movement_X(int& cursorX, int& cursorY) {
         }
     }
 }
-void Movement_Y(int& cursorX, int& cursorY) {
+void Movement_O(int& cursorX, int& cursorY) {
     static float time = 0;
     time -= GetFrameTime();
 
@@ -83,7 +83,7 @@ void UpdateGame(GameScreen& currentScreen) {
 //XỬ LÝ LOGIC CHƠI BẰNG BÀN PHÍM
     if (g_settings.inputMode == INPUT_KEYBOARD) {
         if (g_turn) Movement_X(g_cursorX, g_cursorY); //X
-        else Movement_Y(g_cursorX, g_cursorY);  //O
+        else Movement_O(g_cursorX, g_cursorY);  //O
         if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE)) {
             if (CheckAndPlace(g_cursorX, g_cursorY)) {
                 if (g_settings.soundEnable) {
