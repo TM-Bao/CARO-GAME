@@ -57,10 +57,8 @@ void UpdateSetting(GameScreen& currentScreen) {
             g_settings.soundEnable = !g_settings.soundEnable;
         }
     }
-
-
     if (IsKeyPressed(KEY_ESCAPE) || IsKeyPressed(KEY_ENTER)) {
-        currentScreen = MENU;
+        currentScreen = g_previousScreen;
     }
 }
 

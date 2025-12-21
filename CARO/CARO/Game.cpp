@@ -32,6 +32,7 @@ void UpdateGame(GameScreen& currentScreen) {
     Rectangle btnSetting = { (float)SCREEN_WIDTH - 170, 20, 150, 50 };
     if (CheckCollisionPointRec(GetMousePosition(), btnSetting)) {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            g_previousScreen = GAMEPLAY;
             currentScreen = SETTING;
             return;
         }
