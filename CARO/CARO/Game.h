@@ -23,7 +23,7 @@ bool CheckAndPlace(int cellX, int cellY);
 
 
 void saveGame(const std::string& filename);
-void loadGame(const std::string& filename);
+bool loadGame(const std::string& filename);
 
 #endif // _GAME_H_
 
