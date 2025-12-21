@@ -33,6 +33,9 @@ int main(void) {
         case GAMEPLAY:
             UpdateGame(currentScreen);
             break;
+        case LOAD:
+            UpdateLoad(currentScreen);
+            break;
         case ABOUT:
             UpdateAbout(currentScreen);
             break;
@@ -56,6 +59,9 @@ int main(void) {
             break;
         case GAMEPLAY:
             DrawGameView();
+            break;
+        case LOAD:
+            DrawLoad();
             break;
         case ABOUT:
             DrawAbout();

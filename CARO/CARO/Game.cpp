@@ -28,6 +28,54 @@ void InitGame() {
     g_cursorY = BOARD_SIZE / 2;
 }
 
+//XỬ LÍ DI CHUYỂN ĐỘC LẬP: WADS_X , ↑ ↓ ← →_Y
+void Movement_X(int& cursorX, int& cursorY) {
+    static float time = 0;
+    time -= GetFrameTime();
+
+    if (time <= 0) {
+        if (IsKeyDown(KEY_W) && cursorY > 0) {
+            cursorY--;
+            time = 0.12f;
+        }
+        if (IsKeyDown(KEY_S) && cursorY < BOARD_SIZE - 1) {
+            cursorY++;
+            time = 0.12f;
+        }
+        if (IsKeyDown(KEY_A) && cursorX > 0) {
+            cursorX--;
+            time = 0.12f;
+        }
+        if (IsKeyDown(KEY_D) && cursorX < BOARD_SIZE - 1) {
+            cursorX++;
+            time = 0.12f;
+        }
+    }
+}
+void Movement_Y(int& cursorX, int& cursorY) {
+    static float time = 0;
+    time -= GetFrameTime();
+
+    if (time <= 0) {
+        if (IsKeyDown(KEY_UP) && cursorY > 0) {
+            cursorY--;
+            time = 0.12f;
+        }
+        if (IsKeyDown(KEY_DOWN) && cursorY < BOARD_SIZE - 1) {
+            cursorY++;
+            time = 0.12f;
+        }
+        if (IsKeyDown(KEY_LEFT) && cursorX > 0) {
+            cursorX--;
+            time = 0.12f;
+        }
+        if (IsKeyDown(KEY_RIGHT) && cursorX < BOARD_SIZE - 1) {
+            cursorX++;
+            time = 0.12f;
+        }
+    }
+}
+
 void UpdateGame(GameScreen& currentScreen) {
     Rectangle btnSetting = { (float)SCREEN_WIDTH - 170, 20, 150, 50 };
     if (CheckCollisionPointRec(GetMousePosition(), btnSetting)) {
@@ -74,10 +122,8 @@ void UpdateGame(GameScreen& currentScreen) {
 
     // 1. INPUT KEYBOARD
     if (g_settings.inputMode == INPUT_KEYBOARD) {
-        if (IsKeyPressed(KEY_W) && g_cursorY > 0) g_cursorY--;
-        if (IsKeyPressed(KEY_S) && g_cursorY < BOARD_SIZE - 1) g_cursorY++;
-        if (IsKeyPressed(KEY_A) && g_cursorX > 0) g_cursorX--;
-        if (IsKeyPressed(KEY_D) && g_cursorX < BOARD_SIZE - 1) g_cursorX++;
+        if (g_turn) Movement_X(g_cursorX, g_cursorY); //X
+        else Movement_Y(g_cursorX, g_cursorY);  //O
         if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE)) {
             if (CheckAndPlace(g_cursorX, g_cursorY)) {
                 if (g_settings.soundEnable) PlaySound(fxMove);
