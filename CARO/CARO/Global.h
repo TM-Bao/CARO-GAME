@@ -28,7 +28,7 @@ const int BOARD_OFFSET_Y = (SCREEN_HEIGHT - BOARD_WIDTH) / 2;
 #define HSR_SQUARE_DARK CLITERAL(Color){ 60, 70, 90, 255 }
 #define HSR_SQUARE_LIGHT CLITERAL(Color){ 210, 220, 230, 255 }
 
-enum GameScreen { MENU, LOAD, GAMEPLAY, ABOUT, SETTING };
-
+enum GameScreen { MENU, GAMEPLAY, ABOUT, SETTING };
+extern GameScreen g_previousScreen;
 #endif 
 
